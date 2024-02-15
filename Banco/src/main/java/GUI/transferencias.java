@@ -60,7 +60,7 @@ public class transferencias extends javax.swing.JFrame {
         botonRealizar = new javax.swing.JButton();
         botonSalir = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        NumCuentaOrigen = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -104,7 +104,7 @@ public class transferencias extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cantidadATrasnferir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                    .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(148, 148, 148)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -134,7 +134,7 @@ public class transferencias extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -148,7 +148,16 @@ public class transferencias extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonRealizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRealizarActionPerformed
-        realizarTransferencia();
+        String palabra1 = cantidadATrasnferir.getText();
+        String palabra2 = NumCuentaOrigen.getText();
+        String palabra3 = cuentaQueSeTransferira.getText();
+        if (palabra1.isEmpty() || palabra2.isEmpty() || palabra3.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
+        
+        } else {
+            realizarTransferencia();
+        }
+
     }//GEN-LAST:event_botonRealizarActionPerformed
 
     /**
@@ -188,10 +197,12 @@ public class transferencias extends javax.swing.JFrame {
 
     private void realizarTransferencia() {
         int cantidadTransferir = Integer.parseInt(cantidadATrasnferir.getText());
-        int numCuentaOrigen = Integer.parseInt(jTextField3.getText());
+        int numCuentaOrigen = Integer.parseInt(NumCuentaOrigen.getText());
         int cuentaDestino = Integer.parseInt(cuentaQueSeTransferira.getText());
+
         CuentaDAO cuentaDAO = new CuentaDAO(conexion);
         try {
+
             // Verificar la existencia de la cuenta de origen
             if (!cuentaDAO.verificarExistenciaCuenta(numCuentaOrigen)) {
                 JOptionPane.showMessageDialog(this, "La cuenta de origen no existe");
@@ -243,6 +254,7 @@ public class transferencias extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField NumCuentaOrigen;
     private javax.swing.JButton botonRealizar;
     private javax.swing.JButton botonSalir;
     private javax.swing.JTextField cantidadATrasnferir;
@@ -251,7 +263,6 @@ public class transferencias extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JLabel saldoDisponible;
     // End of variables declaration//GEN-END:variables
 }
