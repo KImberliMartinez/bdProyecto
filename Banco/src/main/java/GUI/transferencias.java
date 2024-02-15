@@ -153,7 +153,6 @@ public class transferencias extends javax.swing.JFrame {
         String palabra3 = cuentaQueSeTransferira.getText();
         if (palabra1.isEmpty() || palabra2.isEmpty() || palabra3.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
-        
         } else {
             realizarTransferencia();
         }
