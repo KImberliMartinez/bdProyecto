@@ -5,11 +5,13 @@
  */
 package GUI;
 
+import DAO.CuentaDAO;
 import DAO.TransaccionDAO;
 import Persistencia.ConexionBD;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.*;
+
 /**
  *
  * @author delll
@@ -18,26 +20,27 @@ public class transferencias extends javax.swing.JFrame {
 
     private TransaccionDAO transaccionDAO;
     private int saldoDisponibleA;
-     private Connection conexion;
+    private Connection conexion;
+
     public transferencias(TransaccionDAO transaccionDAO, int saldoDisponible) {
         this.transaccionDAO = transaccionDAO;
         this.saldoDisponibleA = saldoDisponible;
 
         initComponents();
+
     }
 
-     public transferencias() {
+    public transferencias() {
         initComponents();
         try {
             conexion = ConexionBD.obtenerConexion();
             transaccionDAO = new TransaccionDAO(conexion);
-            // Aquí puedes inicializar saldoDisponible con el valor actual del saldo desde la base de datos
+
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
         }
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,11 +66,7 @@ public class transferencias extends javax.swing.JFrame {
 
         jLabel1.setText("Cantidad a transferir:");
 
-        cantidadATrasnferir.setText("jTextField1");
-
         jLabel2.setText("Cuenta a la que se transferira:");
-
-        cuentaQueSeTransferira.setText("jTextField2");
 
         saldoDisponible.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         saldoDisponible.setText("2000");
@@ -84,8 +83,6 @@ public class transferencias extends javax.swing.JFrame {
         botonSalir.setText("Salir");
 
         jLabel5.setText("No.cuenta origen:");
-
-        jTextField3.setText("jTextField");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -188,26 +185,61 @@ public class transferencias extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private void realizarTransferencia() {
         int cantidadTransferir = Integer.parseInt(cantidadATrasnferir.getText());
         int numCuentaOrigen = Integer.parseInt(jTextField3.getText());
         int cuentaDestino = Integer.parseInt(cuentaQueSeTransferira.getText());
-
-        if (cantidadTransferir > saldoDisponibleA) {
-            JOptionPane.showMessageDialog(this, "La cantidad a transferir excede el saldo disponible");
-            return;
-        }
-
+        CuentaDAO cuentaDAO = new CuentaDAO(conexion);
         try {
+            // Verificar la existencia de la cuenta de origen
+            if (!cuentaDAO.verificarExistenciaCuenta(numCuentaOrigen)) {
+                JOptionPane.showMessageDialog(this, "La cuenta de origen no existe");
+                return;
+            }
+
+            // Verificar la existencia de la cuenta de destino
+            if (!cuentaDAO.verificarExistenciaCuenta(cuentaDestino)) {
+                JOptionPane.showMessageDialog(this, "La cuenta de destino no existe");
+                return;
+            }
+
+            if (numCuentaOrigen == cuentaDestino) {
+                JOptionPane.showMessageDialog(this, "No puedes transferir dinero a tu propia cuenta bancaria");
+                return;
+            }
+
+            // Obtener el saldo disponible actualizado desde la base de datos
+            int saldoDisponibleActualizado = obtenerSaldoDisponible(numCuentaOrigen);
+
+            // Verificar si la cantidad a transferir excede el saldo disponible
+            if (cantidadTransferir > saldoDisponibleActualizado) {
+                JOptionPane.showMessageDialog(this, "La cantidad a transferir excede el saldo disponible");
+                return;
+            }
+
+            // Realizar la transferencia de dinero utilizando el DAO correspondiente
             transaccionDAO.transferirDinero(numCuentaOrigen, cuentaDestino, cantidadTransferir);
             JOptionPane.showMessageDialog(this, "Transferencia exitosa");
-            saldoDisponibleA -= cantidadTransferir;
+
+            // Actualizar el saldo disponible en la interfaz gráfica
+            saldoDisponibleA = saldoDisponibleActualizado - cantidadTransferir;
             saldoDisponible.setText(Integer.toString(saldoDisponibleA));
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Error al realizar la transferencia: " + ex.getMessage());
             ex.printStackTrace(); // Manejo del error
         }
+    }
+
+    private int obtenerSaldoDisponible(int numeroCuenta) throws SQLException {
+        // Creamos una instancia de CuentaDAO utilizando la conexión a la base de datos
+        CuentaDAO cuentaDAO = new CuentaDAO(conexion);
+
+        // Llamamos al método obtenerSaldo de CuentaDAO para obtener el saldo de la cuenta
+        int saldoTotal = cuentaDAO.obtenerSaldo(numeroCuenta);
+
+        // Retornamos el saldo obtenido
+        return saldoTotal;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
