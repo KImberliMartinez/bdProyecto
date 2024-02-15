@@ -201,7 +201,7 @@ public class transferencias extends javax.swing.JFrame {
 
         CuentaDAO cuentaDAO = new CuentaDAO(conexion);
         try {
-
+            
             // Verificar la existencia de la cuenta de origen
             if (!cuentaDAO.verificarExistenciaCuenta(numCuentaOrigen)) {
                 JOptionPane.showMessageDialog(this, "La cuenta de origen no existe");
@@ -213,7 +213,7 @@ public class transferencias extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "La cuenta de destino no existe");
                 return;
             }
-
+            // Verificar que no se pueda transferir dinero a el mismo
             if (numCuentaOrigen == cuentaDestino) {
                 JOptionPane.showMessageDialog(this, "No puedes transferir dinero a tu propia cuenta bancaria");
                 return;
