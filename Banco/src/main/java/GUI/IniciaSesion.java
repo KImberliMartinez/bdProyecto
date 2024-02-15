@@ -41,7 +41,7 @@ public class IniciaSesion extends javax.swing.JFrame {
         jLabel1.setText("Inicio de Sesion");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
-        jLabel2.setText("Nombre/ID:");
+        jLabel2.setText("Telefono:");
 
         jTextField1.setText("jTextField1");
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
