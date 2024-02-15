@@ -9,12 +9,15 @@ package DAO;
  * @author ruben
  */
 import Dominio.Cliente;
+import Persistencia.PersistenciaException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClienteDAO {
     private Connection conexion;
@@ -22,8 +25,10 @@ public class ClienteDAO {
     public ClienteDAO(Connection conexion) {
         this.conexion = conexion;
     }
+    private static final Logger LOG = Logger.getLogger(ClienteDAO.class.getName());
+    
 
-    public void agregarCliente(Cliente cliente) throws SQLException {
+    public void agregarCliente(Cliente cliente) throws SQLException, PersistenciaException {
         String query = "INSERT INTO Clientes (Nombre, Ap_Paterno, Ap_Materno, Domicilio, Fecha_Nacimiento, Edad) " +
                        "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
@@ -31,10 +36,32 @@ public class ClienteDAO {
             pstmt.setString(2, cliente.getApellidoPaterno());
             pstmt.setString(3, cliente.getApellidoMaterno());
             pstmt.setString(4, cliente.getDomicilio());
-            pstmt.setDate(5, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
+            pstmt.setString(5, cliente.getFechaNacimiento());
+            //pstmt.setDate(5, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
             pstmt.setInt(6, cliente.getEdad());
-            pstmt.executeUpdate();
-        }
+             int registrosModificados =pstmt.executeUpdate();
+             LOG.log(Level.INFO, "Se agregaron con éxito {0} ", registrosModificados);
+
+            // obtener el conjunto de resultados que tiene o contiene las llaves generadas durante el registro o inserción
+            ResultSet registroGenerado = pstmt.getGeneratedKeys();
+
+            //nos posicionamos en el primer registro o en el siguiente disponible. 
+            registroGenerado.next();
+         
+            Cliente clienteNuevo = new Cliente(
+                    registroGenerado.getInt(1),
+                    cliente.getNombre(),
+                    cliente.getApellidoPaterno(),
+                    cliente.getApellidoMaterno(),
+                    cliente.getDomicilio(),
+                    cliente.getFechaNacimiento(),
+                    cliente.getEdad()
+            );
+            
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "cliente no agregado", e);
+            throw new PersistenciaException("No se ha podido agregar ningún cliente", e);
+    }
     }
 
     public List<Cliente> obtenerClientes() throws SQLException {
@@ -49,12 +76,48 @@ public class ClienteDAO {
                 cliente.setApellidoPaterno(rs.getString("Ap_Paterno"));
                 cliente.setApellidoMaterno(rs.getString("Ap_Materno"));
                 cliente.setDomicilio(rs.getString("Domicilio"));
-                cliente.setFechaNacimiento(rs.getDate("Fecha_Nacimiento"));
+                cliente.setFechaNacimiento(rs.getString("Fecha_Nacimiento"));
+                //cliente.setFechaNacimiento(rs.getDate("Fecha_Nacimiento"));
                 cliente.setEdad(rs.getInt("Edad"));
                 clientes.add(cliente);
             }
         }
         return clientes;
+    }
+    
+        public void actualizarCliente(Cliente cliente) throws SQLException, PersistenciaException {
+        String query = "UPDATE  Clientes SET Nombre=?, Ap_Paterno=?, Ap_Materno=?, Domicilio=?, Fecha_Nacimiento=?, Edad=? WHERE Nombre=?"; 
+                       
+        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+            pstmt.setString(1, cliente.getNombre());
+            pstmt.setString(2, cliente.getApellidoPaterno());
+            pstmt.setString(3, cliente.getApellidoMaterno());
+            pstmt.setString(4, cliente.getDomicilio());
+            pstmt.setString(5, cliente.getFechaNacimiento());
+            //pstmt.setDate(5, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
+            pstmt.setInt(6, cliente.getEdad());
+//            pstmt.executeUpdate();
+              int registrosModificados = pstmt.executeUpdate();
+            LOG.log(Level.INFO, "Se modifico con éxito {0} ", registrosModificados);
+             ResultSet registroGenerado = pstmt.getGeneratedKeys();
+
+            //nos posicionamos en el primer registro o en el siguiente disponible. 
+            registroGenerado.next();
+
+            Cliente clienteNuevo = new Cliente(
+                    registroGenerado.getInt(1),
+                    cliente.getNombre(),
+                    cliente.getApellidoPaterno(),
+                    cliente.getApellidoMaterno(),
+                    cliente.getDomicilio(),
+                    cliente.getFechaNacimiento(),
+                    cliente.getEdad()
+            );
+            
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "cliente no encontrado", e);
+            throw new PersistenciaException("No se ha encontrado ningún cliente", e);
+        }
     }
 
 }

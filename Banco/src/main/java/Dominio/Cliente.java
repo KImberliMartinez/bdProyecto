@@ -17,10 +17,10 @@ public class Cliente {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String domicilio;
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
     private int edad;
 
-    public Cliente(int idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, Date fechaNacimiento, int edad) {
+    public Cliente(int idCliente, String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, int edad) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
@@ -30,7 +30,7 @@ public class Cliente {
         this.edad = edad;
     }
 
-    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, Date fechaNacimiento, int edad) {
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, int edad) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -38,6 +38,8 @@ public class Cliente {
         this.fechaNacimiento = fechaNacimiento;
         this.edad = edad;
     }
+
+    
     
 
     public Cliente() {
@@ -84,11 +86,11 @@ public class Cliente {
         this.domicilio = domicilio;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 
