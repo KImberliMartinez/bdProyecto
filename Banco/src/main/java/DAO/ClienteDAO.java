@@ -57,6 +57,5 @@ public class ClienteDAO {
         return clientes;
     }
 
-    // Otros métodos para actualizar, eliminar clientes, etc.
 }
 
