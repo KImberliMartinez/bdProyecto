@@ -29,8 +29,8 @@ public class ClienteDAO {
     
 
     public void agregarCliente(Cliente cliente) throws SQLException, PersistenciaException {
-        String query = "INSERT INTO Clientes (Nombre, Ap_Paterno, Ap_Materno, Domicilio, Fecha_Nacimiento, Edad) " +
-                       "VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Clientes (Nombre, Ap_Paterno, Ap_Materno, Domicilio, Fecha_Nacimiento) " +
+                       "VALUES ('?','?' ,'?','?','?')";
         try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setString(1, cliente.getNombre());
             pstmt.setString(2, cliente.getApellidoPaterno());
@@ -38,7 +38,7 @@ public class ClienteDAO {
             pstmt.setString(4, cliente.getDomicilio());
             pstmt.setString(5, cliente.getFechaNacimiento());
             //pstmt.setDate(5, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
-            pstmt.setInt(6, cliente.getEdad());
+           // pstmt.setInt(6, cliente.getEdad());
              int registrosModificados =pstmt.executeUpdate();
              LOG.log(Level.INFO, "Se agregaron con éxito {0} ", registrosModificados);
 

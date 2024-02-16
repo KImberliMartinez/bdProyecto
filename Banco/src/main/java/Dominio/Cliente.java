@@ -30,7 +30,7 @@ public class Cliente {
         this.edad = edad;
     }
 
-    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, int edad) {
+    public Cliente(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;

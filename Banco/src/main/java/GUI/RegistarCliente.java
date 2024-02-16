@@ -188,7 +188,7 @@ public class RegistarCliente extends javax.swing.JFrame {
         
      try {
          // TODO add your handling code here:
-         String rest = control.insertar(txtNombre.getText(),txtApellidoP.getText(),txtApellidoM.getText(),txtDomicilio.getText(),txtFechaN.getText());
+         String rest = control.insertar("a","a","a","a","2000-05-15");
      } catch (PersistenciaException ex) {
          Logger.getLogger(RegistarCliente.class.getName()).log(Level.SEVERE, null, ex);
      }

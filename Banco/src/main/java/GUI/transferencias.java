@@ -24,22 +24,29 @@ public class transferencias extends javax.swing.JFrame {
 
     public transferencias(TransaccionDAO transaccionDAO, int saldoDisponible) {
         this.transaccionDAO = transaccionDAO;
-        this.saldoDisponibleA = saldoDisponible;
 
         initComponents();
-
+        
     }
 
+    // int numCuentaOrigen = Integer.parseInt(NumCuentaOrigen.getText());
+    // int saldoDisponibleActualizado = obtenerSaldoDisponible(numCuentaOrigen);
+    // saldoDisponibleA = saldoDisponibleActualizado
     public transferencias() {
         initComponents();
+        
         try {
+            
             conexion = ConexionBD.obtenerConexion();
             transaccionDAO = new TransaccionDAO(conexion);
+                        saldoDisponible.setText(Integer.toString(saldoDisponibleA));
 
+            
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
         }
+        
     }
 
     /**
@@ -81,8 +88,19 @@ public class transferencias extends javax.swing.JFrame {
         });
 
         botonSalir.setText("Salir");
+        botonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSalirActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("No.cuenta origen:");
+
+        NumCuentaOrigen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NumCuentaOrigenActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -159,6 +177,19 @@ public class transferencias extends javax.swing.JFrame {
 
     }//GEN-LAST:event_botonRealizarActionPerformed
 
+    private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
+        // TODO add your handling code here:
+        opcionesCliente op = new opcionesCliente();
+        op.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_botonSalirActionPerformed
+
+    private void NumCuentaOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumCuentaOrigenActionPerformed
+        // TODO add your handling code here:
+              //  this.saldoDisponibleA = obtenerSaldoDisponible();
+
+    }//GEN-LAST:event_NumCuentaOrigenActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -185,10 +216,11 @@ public class transferencias extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(transferencias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+          
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+                
                 new transferencias().setVisible(true);
             }
         });
@@ -201,7 +233,7 @@ public class transferencias extends javax.swing.JFrame {
 
         CuentaDAO cuentaDAO = new CuentaDAO(conexion);
         try {
-            
+
             // Verificar la existencia de la cuenta de origen
             if (!cuentaDAO.verificarExistenciaCuenta(numCuentaOrigen)) {
                 JOptionPane.showMessageDialog(this, "La cuenta de origen no existe");

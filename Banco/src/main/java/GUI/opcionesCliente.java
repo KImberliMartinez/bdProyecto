@@ -53,6 +53,11 @@ public class opcionesCliente extends javax.swing.JFrame {
         jButton4.setText("Actualizar datos personales");
 
         jButton5.setText("Regresar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Crear retiro sin tarjeta");
 
@@ -102,6 +107,10 @@ public class opcionesCliente extends javax.swing.JFrame {
         t.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments

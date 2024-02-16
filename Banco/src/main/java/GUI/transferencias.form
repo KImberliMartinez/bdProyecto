@@ -137,6 +137,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Salir"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="botonSalirActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -144,6 +147,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="NumCuentaOrigen">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="NumCuentaOrigenActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

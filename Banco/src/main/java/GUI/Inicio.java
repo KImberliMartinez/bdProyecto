@@ -38,6 +38,11 @@ public class Inicio extends javax.swing.JFrame {
         jToggleButton3.setText("Salir");
 
         jButton1.setText("Iniciar Sesion");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Retirar dinero son tarjeta");
 
@@ -87,6 +92,12 @@ public class Inicio extends javax.swing.JFrame {
         r.setVisible(true);
         
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        IniciaSesion ini= new IniciaSesion();
+        ini.setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

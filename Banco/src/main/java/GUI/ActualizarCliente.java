@@ -45,10 +45,6 @@ public class ActualizarCliente extends javax.swing.JFrame {
 
         jLabel6.setText(" Domicilio:");
 
-        jTextField2.setText("jTextField2");
-
-        jTextField5.setText("jTextField5");
-
         jButton1.setText("Actualizar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
