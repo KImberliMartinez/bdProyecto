@@ -1,1 +1,5 @@
 /Banco/target/
+/ProyectoPorCapas/BancoPersistencia/target/
+/ProyectoPorCapas/BancoDominio/target/
+/ProyectoPorCapas/BancoNegocio/target/
+/ProyectoPorCapas/BancoPresentacion/target/
