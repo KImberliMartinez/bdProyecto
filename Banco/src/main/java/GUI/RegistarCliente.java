@@ -9,6 +9,7 @@ import DAO.ClienteDAO;
 import Dominio.Cliente;
 import Negocio.controlCliente;
 import Persistencia.PersistenciaException;
+import Persistencia.dtos.ClienteNuevoDTO;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +30,7 @@ public class RegistarCliente extends javax.swing.JFrame {
     public RegistarCliente() {
         initComponents();
         
-         control = new controlCliente();
+
     }
  private void limpiar() {
         txtNombre.setText("");
@@ -184,20 +185,20 @@ public class RegistarCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-     
-        
      try {
-         // TODO add your handling code here:
-         String rest = control.insertar("a","a","a","a","2000-05-15");
-     } catch (PersistenciaException ex) {
+         ClienteNuevoDTO n= new ClienteNuevoDTO(txtNombre.getText(), txtApellidoP.getText(), txtApellidoM.getText(), txtDomicilio.getText(), txtFechaN.getText());
+         c.agregarCliente(n);
+//try {
+
+//         String r=control.insertar(txtNombre.getText(), txtApellidoP.getText(), txtApellidoM.getText(), txtDomicilio.getText(), txtFechaN.getText());
+//     } catch (PersistenciaException ex) {
+//         Logger.getLogger(RegistarCliente.class.getName()).log(Level.SEVERE, null, ex);
+//     }
+
+limpiar();
+     } catch (SQLException ex) {
          Logger.getLogger(RegistarCliente.class.getName()).log(Level.SEVERE, null, ex);
      }
-    
- 
-     
-    
-          
-          limpiar();
      
 
     }//GEN-LAST:event_btnAgregarActionPerformed

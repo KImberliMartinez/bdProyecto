@@ -8,6 +8,8 @@ package Negocio;
 import DAO.ClienteDAO;
 import Dominio.Cliente;
 import Persistencia.PersistenciaException;
+import Persistencia.dtos.ClienteNuevoDTO;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.logging.Level;
@@ -18,23 +20,30 @@ import java.util.logging.Logger;
  * @author delll
  */
 public class controlCliente {
-    ClienteDAO datos;
-    Cliente cliente;
-     public String insertar(String nombre, String apellidoP, String apellidoM, String Direccion,String fecha) throws PersistenciaException {
+        private Connection conexion;
 
-        cliente.setNombre(nombre);
-        cliente.setApellidoPaterno(apellidoP);
-        cliente.setApellidoMaterno(apellidoM);
-        cliente.setDomicilio(Direccion);
-        cliente.setFechaNacimiento(fecha);
-    // cliente.setFechaNacimiento(fecha);
-   
+    public controlCliente(Connection conexion) {
+        this.conexion = conexion;
+    }
+    ClienteDAO datos;
+    ClienteNuevoDTO cliente;
+     public void insertar(String nombre, String apellidoP, String apellidoM, String Direccion,String fecha) throws PersistenciaException {
+         cliente=new ClienteNuevoDTO(nombre, apellidoP, apellidoM, Direccion, fecha);
+//        cliente.setNombre(nombre);
+//        cliente.setApellidoPaterno(apellidoP);
+//        cliente.setApellidoMaterno(apellidoM);
+//        cliente.setDomicilio(Direccion);
+//        cliente.setFechaNacimiento(fecha);
+            try {
+                // cliente.setFechaNacimiento(fecha);
+                datos.agregarCliente(cliente);
+            } catch (SQLException ex) {
+                Logger.getLogger(controlCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
-        try {
-            datos.agregarCliente(cliente);
-        } catch (SQLException ex) {
-            Logger.getLogger(controlCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            
+       
+        
 
         
         return "listo";

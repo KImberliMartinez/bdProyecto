@@ -16,10 +16,10 @@ public class ClienteNuevoDTO {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String domicilio;
-    private Date fechaNacimiento;
+    private String fechaNacimiento;
     private int edad;
 
-    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, Date fechaNacimiento, int edad) {
+    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento) {
         this.nombre = nombre;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
@@ -60,11 +60,11 @@ public class ClienteNuevoDTO {
         this.domicilio = domicilio;
     }
 
-    public Date getFechaNacimiento() {
+    public String getFechaNacimiento() {
         return fechaNacimiento;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
+    public void setFechaNacimiento(String fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
     }
 

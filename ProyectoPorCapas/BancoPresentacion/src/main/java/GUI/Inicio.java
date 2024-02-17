@@ -88,7 +88,7 @@ public class Inicio extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        RegistarCliente r=new RegistarCliente();
+        Registro r=new Registro();
         r.setVisible(true);
         
     }//GEN-LAST:event_jButton3ActionPerformed

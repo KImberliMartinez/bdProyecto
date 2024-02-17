@@ -20,7 +20,7 @@ public class ConexionBD {
     private static final String CONTRASEÑA = "12131442";
 
     // Método para obtener una conexión a la base de datos
-    public static Connection obtenerConexion() throws SQLException {
+    public  Connection obtenerConexion() throws SQLException {
         Connection conexion = null;
         try {
             // Cargar el driver de MySQL

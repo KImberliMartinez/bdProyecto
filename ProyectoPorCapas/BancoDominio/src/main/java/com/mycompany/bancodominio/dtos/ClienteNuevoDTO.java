@@ -17,31 +17,27 @@ public class ClienteNuevoDTO {
     private String apellidoMaterno;
     private String domicilio;
     private String fechaNacimiento;
-    private int edad;
 
-    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, int edad) {
-        this.nombre = nombre;
-        this.apellidoPaterno = apellidoPaterno;
-        this.apellidoMaterno = apellidoMaterno;
-        this.domicilio = domicilio;
-        this.fechaNacimiento = fechaNacimiento;
-        this.edad = edad;
-    }
 
-    public int getEdad() {
-        return edad;
-    }
-
-//    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento) {
+//    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, int edad) {
 //        this.nombre = nombre;
 //        this.apellidoPaterno = apellidoPaterno;
 //        this.apellidoMaterno = apellidoMaterno;
 //        this.domicilio = domicilio;
 //        this.fechaNacimiento = fechaNacimiento;
+//       
 //    }
-    public void setEdad(int edad) {
-        this.edad = edad;
+
+   
+
+    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.domicilio = domicilio;
+        this.fechaNacimiento = fechaNacimiento;
     }
+    
 
     public String getNombre() {
         return nombre;

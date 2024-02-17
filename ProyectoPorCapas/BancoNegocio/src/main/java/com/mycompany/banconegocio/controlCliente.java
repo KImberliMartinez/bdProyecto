@@ -13,6 +13,7 @@ import com.mycompany.bancopersistencia.PersistenciaException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -20,33 +21,22 @@ import java.util.logging.Logger;
  */
 public class controlCliente {
     ClienteDAO datos;
-    Cliente cliente;
-    ClienteNuevoDTO c;
+    ClienteNuevoDTO cliente;
+//    ClienteNuevoDTO c;
    
-     public String insertar(String nombre, String apellidoP, String apellidoM, String Direccion,String fecha,int edad ){
-        c.setNombre(nombre);
-        c.setApellidoPaterno(apellidoP);
-        c.setApellidoMaterno(apellidoM);
-        c.setDomicilio(Direccion);
-        c.setFechaNacimiento(fecha);
-        c.setEdad(edad);
-    // cliente.setFechaNacimiento(fecha);
+   public void insertar(String nombre, String apellidoP, String apellidoM, String Direccion,String fecha) throws PersistenciaException {
         try {
+            ClienteNuevoDTO c=new ClienteNuevoDTO(nombre,apellidoP,apellidoM,Direccion,fecha);
             datos.agregarCliente(c);
+            
         } catch (SQLException ex) {
             Logger.getLogger(controlCliente.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (PersistenciaException ex) {
-            Logger.getLogger(controlCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
+           
+   }
 
-        
-        return "listo";
-
-    }
-
-     public String actualizar(ClienteNuevoDTO a) throws PersistenciaException, SQLException {
-        datos.actualizarCliente(a);
-        return "";
-    }
+//     public String actualizar(ClienteNuevoDTO a) throws PersistenciaException, SQLException {
+//        datos.actualizarCliente(a);
+//        return "";
+//    }
 }
