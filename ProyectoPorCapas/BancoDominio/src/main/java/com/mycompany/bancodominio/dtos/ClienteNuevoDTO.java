@@ -28,6 +28,15 @@ public class ClienteNuevoDTO {
 //       
 //    }
 
+    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.domicilio = domicilio;
+    }
+
+   
+
    
 
     public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento) {
