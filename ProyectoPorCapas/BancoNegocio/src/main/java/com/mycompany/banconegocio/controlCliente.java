@@ -7,13 +7,11 @@ package com.mycompany.banconegocio;
 
 
 import com.mycompany.bancodominio.DAO.ClienteDAO;
-import com.mycompany.bancodominio.Cliente;
 import com.mycompany.bancodominio.dtos.ClienteNuevoDTO;
 import com.mycompany.bancopersistencia.PersistenciaException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *

@@ -121,8 +121,7 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
             // Validar el folio y la contraseña
             boolean valido = retirosSinCuentaDAO.validarFolioYContrasenia(folio, contrasenia);
             if (valido) {
-                // Continuar con la operación de retiro
-                // Aquí puedes abrir la siguiente ventana o realizar alguna otra acción
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Folio o contraseña incorrectos");
             }

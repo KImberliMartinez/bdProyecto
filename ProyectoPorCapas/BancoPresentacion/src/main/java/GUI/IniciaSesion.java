@@ -5,7 +5,8 @@
  */
 package GUI;
 
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+
 
 
 /**
@@ -58,7 +59,6 @@ public class IniciaSesion extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel2.setText("Telefono:");
 
-        txtTel.setText("1215451215");
         txtTel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTelActionPerformed(evt);
@@ -67,8 +67,6 @@ public class IniciaSesion extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel3.setText("Password:");
-
-        jPasswordField1.setText("jPasswordField1");
 
         Continuar.setText("Continuar");
         Continuar.addActionListener(new java.awt.event.ActionListener() {
@@ -135,11 +133,20 @@ public class IniciaSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelActionPerformed
 
     private void ContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContinuarActionPerformed
-        // TODO add your handling code here:
-        opcionesCliente op=new opcionesCliente();
-         op.setTelefono(txtTel.getText());
-         op.setVisible(true);
-        dispose();
+       // TODO add your handling code here:
+        long telefono = Long.parseLong(txtTel.getText());
+        String contrasena = new String(jPasswordField1.getPassword());
+        int numeroCuenta = consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
+        if (numeroCuenta != -1) {
+            // El usuario existe en la base de datos y tiene una cuenta asociada
+            opcionesCliente op = new opcionesCliente();
+            op.setTelefono(txtTel.getText());
+            op.setVisible(true);
+            dispose();
+        } else {
+            // El usuario no existe en la base de datos o los credenciales son incorrectos
+            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+        }
     }//GEN-LAST:event_ContinuarActionPerformed
 
     /**
