@@ -5,36 +5,120 @@
  */
 package GUI;
 
+import com.mycompany.bancodominio.Cuenta;
 import com.mycompany.bancodominio.DAO.CuentaDAO;
+import com.mycompany.bancodominio.DAO.TransaccionDAO;
 import com.mycompany.bancodominio.dtos.UsuarioDTO;
 import com.mycompany.banconegocio.controlCuenta;
+import com.mycompany.bancopersistencia.ConexionBD;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author delll
  */
-public class AdministrarCuentas extends javax.swing.JFrame {
-    private String Telefono;
+public final class AdministrarCuentas extends javax.swing.JFrame {
+    private String Tel;
+    private int id;
     private CuentaDAO cc;
      private Connection conexion;
+   
     /**
      * Creates new form AdministrarCuentas
      */
     public AdministrarCuentas()  {
         initComponents();
-      
+        try {
+            conexion = ConexionBD.obtenerConexion();
+             cc = new CuentaDAO(conexion);
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+        IniciaSesion i= new IniciaSesion();
+        Tel=i.usuario;
+        
+        System.out.println("pantalla admiCuentas"+Tel);
+        try {
+            id=cc.consultarClientesPortelefono(Tel);
+            //lista(id);
+           List<Cuenta> listaCuentas = lista(id);
+            System.out.println(listaCuentas);
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
+    public AdministrarCuentas(Connection conexion) {
+        this.conexion = conexion;
+    }
+    
+
     public void setTelefono(String Telefono) {
-        this.Telefono = Telefono;
+        this.Tel = Telefono;
         txUsuario.setText(Telefono);
     }
-//    
+      public String getTelefono(){
+         String tel=txUsuario.getText();
+        return tel ;
+    }
+    
+
+       public List<Cuenta> lista(int idC) throws SQLException {
+        List<Cuenta> lista = new ArrayList<>();
+        String query = "SELECT * FROM Cuentas WHERE id_cliente = ?";
+        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+            pstmt.setInt(1, idC);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                  int idCuenta= rs.getInt("Numero_cuenta");
+                   String fecha= rs.getString("Fecha_de_apertura");
+                    int Saldo=rs.getInt("saldo");
+                    int cliente=rs.getInt("id_cliente");
+                    System.out.println(idCuenta);
+                    System.out.println(fecha);
+                    System.out.println(Saldo);
+                    System.out.println(cliente);
+                    Cuenta c=new Cuenta(idCuenta, fecha, Saldo, cliente);
+                    lista.add(c);
+                }
+            }
+        }catch(SQLException e){
+            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return lista;
+    }
+
+    public void mostrarRegistros() {
+        try {
+            List<Cuenta> listaCuentas = lista(id);
+             DefaultTableModel modeloTabla =  (DefaultTableModel) this.tabla.getModel();
+        modeloTabla.setRowCount(0);
+        listaCuentas.forEach(cuentas -> {
+            Object[] filas = new Object[4];
+            filas[0] = cuentas.getNumeroCuenta();
+            filas[1] = cuentas.getFechaApertura();
+            filas[2] = cuentas.getSaldo();
+            filas[3]=cuentas.getIdCliente();
+               modeloTabla.addRow(filas);
+        });
+        } catch (SQLException ex) {
+            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+    }
+    
     
     
   
@@ -49,32 +133,30 @@ public class AdministrarCuentas extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         txUsuario = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tabla = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Cuentas");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Num de cuenta", "Fecha Apertura", "Saldo actual"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
         jButton1.setText("Agregar Nueva");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         Cancelar.setText("Cancelar una cuenta");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         Salir.setText("Salir");
         Salir.addActionListener(new java.awt.event.ActionListener() {
@@ -83,30 +165,43 @@ public class AdministrarCuentas extends javax.swing.JFrame {
             }
         });
 
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tabla);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(122, 122, 122)
-                        .addComponent(txUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addComponent(Cancelar)
-                .addContainerGap(71, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1)
                     .addComponent(Salir))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(132, 132, 132)
+                        .addComponent(txUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Cancelar)
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,13 +211,13 @@ public class AdministrarCuentas extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(8, 8, 8)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(Cancelar))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         pack();
@@ -134,6 +229,20 @@ public class AdministrarCuentas extends javax.swing.JFrame {
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        // TODO add your handling code here:
+        CancelarCuenta c= new CancelarCuenta();
+        c.setTelefono(Tel);
+        c.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("ver id "+id);
+         
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,8 +287,8 @@ public class AdministrarCuentas extends javax.swing.JFrame {
     private javax.swing.JButton Salir;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tabla;
     private javax.swing.JLabel txUsuario;
     // End of variables declaration//GEN-END:variables
 }

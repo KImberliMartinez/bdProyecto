@@ -297,6 +297,7 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
 //                JOptionPane.showMessageDialog(this,"Complete todos los campos");
 //            }
 //            // TODO add your handling code here:
+
 //            ClienteNuevoDTO c=new ClienteNuevoDTO(tNombre.getText(), tAP.getText(), tAM.getText(), tD.getText(),tFN.getText());
 //        try {
 //            

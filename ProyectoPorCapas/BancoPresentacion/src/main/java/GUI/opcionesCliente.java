@@ -16,6 +16,10 @@ private String Telefono;
      */
     public opcionesCliente() {
         initComponents();
+         IniciaSesion i= new IniciaSesion();
+        System.out.println("Pantalla opClientes"+i.usuario);
+
+        Telefono=i.usuario;
     }
     public void setTelefono(String Telefono) {
         this.Telefono = Telefono;
@@ -167,7 +171,9 @@ private String Telefono;
     private void ConsultaCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaCuentasActionPerformed
         // TODO add your handling code here:
         AdministrarCuentas ad=new AdministrarCuentas();
-        ad.setTelefono(Telefono);
+        IniciaSesion  i=new IniciaSesion();
+       // System.out.println(ad.getTelefono());
+      //  ad.setTelefono(this.getTelefono());
         ad.setVisible(true);
     }//GEN-LAST:event_ConsultaCuentasActionPerformed
 

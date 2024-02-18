@@ -12,15 +12,21 @@ import java.util.Date;
 
 public class Cuenta {
     private int numeroCuenta;
-    private Date fechaApertura;
+    private String fechaApertura;
     private int saldo;
     private int idCliente;
 
-    public Cuenta(int numeroCuenta, Date fechaApertura, int saldo, int idCliente) {
+    public Cuenta(int numeroCuenta, String fechaApertura, int saldo, int idCliente) {
         this.numeroCuenta = numeroCuenta;
         this.fechaApertura = fechaApertura;
         this.saldo = saldo;
         this.idCliente = idCliente;
+    }
+
+    public Cuenta(int numeroCuenta, String fechaApertura, int saldo) {
+        this.numeroCuenta = numeroCuenta;
+        this.fechaApertura = fechaApertura;
+        this.saldo = saldo;
     }
 
     public int getNumeroCuenta() {
@@ -31,11 +37,11 @@ public class Cuenta {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Date getFechaApertura() {
+    public String getFechaApertura() {
         return fechaApertura;
     }
 
-    public void setFechaApertura(Date fechaApertura) {
+    public void setFechaApertura(String fechaApertura) {
         this.fechaApertura = fechaApertura;
     }
 
