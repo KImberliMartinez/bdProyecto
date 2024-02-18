@@ -17,6 +17,8 @@ public class ClienteNuevoDTO {
     private String apellidoMaterno;
     private String domicilio;
     private String fechaNacimiento;
+    private String telefono;
+    private String contra;
 
 
 //    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, int edad) {
@@ -35,6 +37,16 @@ public class ClienteNuevoDTO {
         this.domicilio = domicilio;
     }
 
+    public ClienteNuevoDTO(String nombre, String apellidoPaterno, String apellidoMaterno, String domicilio, String fechaNacimiento, String telefono, String contra) {
+        this.nombre = nombre;
+        this.apellidoPaterno = apellidoPaterno;
+        this.apellidoMaterno = apellidoMaterno;
+        this.domicilio = domicilio;
+        this.fechaNacimiento = fechaNacimiento;
+        this.telefono = telefono;
+        this.contra = contra;
+    }
+
    
 
    
@@ -45,6 +57,22 @@ public class ClienteNuevoDTO {
         this.apellidoMaterno = apellidoMaterno;
         this.domicilio = domicilio;
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getContra() {
+        return contra;
+    }
+
+    public void setContra(String contra) {
+        this.contra = contra;
     }
     
 

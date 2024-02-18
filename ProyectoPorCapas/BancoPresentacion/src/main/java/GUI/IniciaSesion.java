@@ -5,18 +5,33 @@
  */
 package GUI;
 
+import javax.swing.JTextField;
+
+
 /**
  *
  * @author delll
  */
 public class IniciaSesion extends javax.swing.JFrame {
-
+   public String usuario;
     /**
      * Creates new form IniciaSesion
      */
     public IniciaSesion() {
         initComponents();
+             usuario=txtTel.getText();
     }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+    
+  
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -29,10 +44,10 @@ public class IniciaSesion extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtTel = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
+        Continuar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -43,10 +58,10 @@ public class IniciaSesion extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel2.setText("Telefono:");
 
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtTel.setText("1215451215");
+        txtTel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtTelActionPerformed(evt);
             }
         });
 
@@ -55,7 +70,12 @@ public class IniciaSesion extends javax.swing.JFrame {
 
         jPasswordField1.setText("jPasswordField1");
 
-        jButton1.setText("Continuar");
+        Continuar.setText("Continuar");
+        Continuar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ContinuarActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Salir");
 
@@ -76,14 +96,14 @@ public class IniciaSesion extends javax.swing.JFrame {
                                 .addComponent(jLabel3)
                                 .addGap(32, 32, 32)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
+                            .addComponent(txtTel, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
                             .addComponent(jPasswordField1))))
                 .addContainerGap(98, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(Continuar)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -94,14 +114,14 @@ public class IniciaSesion extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(Continuar)
                     .addComponent(jButton2))
                 .addContainerGap())
         );
@@ -109,9 +129,18 @@ public class IniciaSesion extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtTelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        setUsuario(txtTel.getText());
+    }//GEN-LAST:event_txtTelActionPerformed
+
+    private void ContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContinuarActionPerformed
+        // TODO add your handling code here:
+        opcionesCliente op=new opcionesCliente();
+         op.setTelefono(txtTel.getText());
+         op.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_ContinuarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -150,12 +179,12 @@ public class IniciaSesion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton Continuar;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField txtTel;
     // End of variables declaration//GEN-END:variables
 }

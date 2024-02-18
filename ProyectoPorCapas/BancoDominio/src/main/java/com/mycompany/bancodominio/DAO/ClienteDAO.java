@@ -50,6 +50,33 @@ public class ClienteDAO {
         }
          LOG.log(Level.INFO,"Cliente agregado con exito");
     }
+ 
+ 
+ public  void agregarClienteYusuario(ClienteNuevoDTO c) throws SQLException {
+        // Definimos la llamada al procedimiento almacenado
+        String sql = "CALL AgregarClienteYUsuario (?,?,?,?,?,?,?)";
+        
+         try ( PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+            // Asignamos los valores a los parámetros del procedimiento almacenado
+            pstmt.setString(1, c.getNombre());
+            pstmt.setString(2, c.getApellidoPaterno());
+            pstmt.setString(3, c.getApellidoMaterno());
+            pstmt.setString(4, c.getDomicilio());
+            pstmt.setString(5, c.getFechaNacimiento());
+            pstmt.setString(6, c.getTelefono());
+            pstmt.setString(7, c.getContra());
+            
+            
+
+            // Ejecutamos la llamada al procedimiento almacenado
+            pstmt.executeUpdate();
+          LOG.log(Level.INFO,"Cliente y usuario agregados con exito");
+        }catch(SQLException e){
+           LOG.log(Level.SEVERE,"Cliente y usuario no  agregados",e);
+
+        }
+         
+    }
          public void actualizarCliente(ClienteNuevoDTO cliente) throws SQLException, PersistenciaException {
         String query = "CALL actualizar_cliente  (?,?,?,?)"; 
                        

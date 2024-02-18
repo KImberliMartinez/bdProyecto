@@ -202,12 +202,16 @@ public class ActualizarCliente extends javax.swing.JFrame {
 
     private void ActalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ActalizarActionPerformed
         // TODO add your handling code here:
+         if (txNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|txDom.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"Complete todos los campos");
+            }
         ClienteNuevoDTO c = new ClienteNuevoDTO(txNombre.getText(),tAP.getText(),tAM.getText(),txDom.getText());
         try {
             clienteDAO.actualizarCliente(c);
-            Logger.getLogger(Registro.class.getName()).log(Level.INFO, "Cleinete actualizado ");
+             JOptionPane.showMessageDialog(this,"Cliente actualizado ");
             limpiar();
         } catch (SQLException | PersistenciaException ex) {
+            JOptionPane.showMessageDialog(this,"Cliente no actualizado, no se encontro");
             Logger.getLogger(ActualizarCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 

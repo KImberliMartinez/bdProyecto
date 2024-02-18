@@ -8,10 +8,12 @@ package com.mycompany.bancodominio.DAO;
  *
  * @author ruben
  */
+import com.mycompany.bancodominio.dtos.UsuarioDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
 
 public class CuentaDAO {
     private Connection conexion;
@@ -56,6 +58,21 @@ public class CuentaDAO {
     }
     return false; // Retornar false si no se encuentra la cuenta
 }
+    
+     public void consultarClientesPortelefono(String telefono) throws SQLException{
+        String sql = "ConsultarCuentasCliente(?)";
+        
+         try ( PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+            // Asignamos los valores a los parámetros del procedimiento almacenado
+            pstmt.setString(1,telefono);
+            // Ejecutamos la llamada al procedimiento almacenado
+            pstmt.executeUpdate();
+           
+          
+        }
+         
+    }
+
     
 }
 
