@@ -6,10 +6,11 @@
 package GUI;
 
 import com.mycompany.bancodominio.DAO.CuentaDAO;
+import com.mycompany.banconegocio.controlCuenta;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-
+import com.mycompany.banconegocio.SesionUsuario;
 /**
  *
  * @author delll
@@ -101,15 +102,21 @@ private Connection conexion;
     
     private void botonRetirarDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetirarDineroActionPerformed
          double montoARetirar = Double.parseDouble(montoDineroARetirar.getText());
-
+         double saldoActual = 0;
+         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+         int numeroCuenta = sesionUsuario.getNumeroCuenta();
         // Obtener el saldo actual del cliente desde la base de datos
-        double saldoActual = obtenerSaldoDisponible();
-
+        try{
+        saldoActual = obtenerSaldoDisponible(sesionUsuario.getNumeroCuenta());
+        }catch(SQLException ex){
+            ex.printStackTrace();
+        }
         if (saldoActual >= montoARetirar) {
+             controlCuenta control = new controlCuenta(conexion);
             // Permitir el retiro
             double nuevoSaldo = saldoActual - montoARetirar;
             // Actualizar el saldo en la base de datos
-            actualizarSaldoClienteEnBD(nuevoSaldo);
+            control.actualizarSaldoCliente(numeroCuenta,nuevoSaldo);
             JOptionPane.showMessageDialog(this, "Retiro exitoso. Nuevo saldo: " + nuevoSaldo);
         } else {
             // Mostrar mensaje de error

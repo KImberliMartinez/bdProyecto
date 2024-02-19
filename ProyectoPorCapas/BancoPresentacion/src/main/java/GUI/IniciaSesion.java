@@ -148,7 +148,7 @@ public class IniciaSesion extends javax.swing.JFrame {
        controlCuenta controlCuenta = new controlCuenta(conexion);
         long telefono = Long.parseLong(txtTel.getText());
         String contrasena = new String(jPasswordField1.getPassword());
-       
+        //
         int numeroCuenta = controlCuenta.consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
         if (numeroCuenta != -1) {
             // El usuario existe en la base de datos y tiene una cuenta asociada

@@ -85,5 +85,33 @@ public class controlCuenta {
             return -1;
         }
     }
+    public int obtenerSaldoDisponible(int numeroCuenta) {
+        int saldoDisponible = 0;
+        String query = "SELECT Saldo FROM Cuentas WHERE Numero_Cuenta = ?";
+        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+            pstmt.setInt(1, numeroCuenta);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    saldoDisponible = rs.getInt("Saldo");
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return saldoDisponible;
 
+}
+    public boolean actualizarSaldoCliente(int numeroCuenta, double nuevoSaldo) {
+        String query = "UPDATE Cuentas SET Saldo = ? WHERE Numero_Cuenta = ?";
+        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+            pstmt.setDouble(1, nuevoSaldo);
+            pstmt.setInt(2, numeroCuenta);
+            int filasActualizadas = pstmt.executeUpdate();
+            return filasActualizadas > 0;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+    
 }
