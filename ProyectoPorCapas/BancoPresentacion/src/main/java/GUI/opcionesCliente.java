@@ -12,27 +12,31 @@ import com.mycompany.banconegocio.SesionUsuario;
  * @author delll
  */
 public class opcionesCliente extends javax.swing.JFrame {
-private String Telefono;
-private SesionUsuario iniciarSesion;
+
+    private String Telefono;
+    private SesionUsuario iniciarSesion;
+
     /**
      * Creates new form opcionesCliente
      */
     public opcionesCliente() {
         initComponents();
-         IniciaSesion i= new IniciaSesion();
-        System.out.println("Pantalla opClientes"+i.usuario);
+        IniciaSesion i = new IniciaSesion();
+        System.out.println("Pantalla opClientes" + i.usuario);
 
-        Telefono=i.usuario;
+        Telefono = i.usuario;
     }
+
     public void setTelefono(String Telefono) {
         this.Telefono = Telefono;
         Usuario.setText(Telefono);
     }
-    
-    public String getTelefono(){
-         String tel=Usuario.getText();
-        return tel ;
+
+    public String getTelefono() {
+        String tel = Usuario.getText();
+        return tel;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -148,48 +152,47 @@ private SesionUsuario iniciarSesion;
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-          // TODO add your handling code here:
-        transferencias t=new transferencias();
+        // TODO add your handling code here:
+        transferencias t = new transferencias();
         t.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-            ActualizarCliente ac=new ActualizarCliente();
-            ac.setVisible(true);
+
+        ActualizarCliente ac = new ActualizarCliente();
+        ac.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        CrearRetiro cr=new CrearRetiro();
+        CrearRetiro cr = new CrearRetiro();
         cr.setVisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void ConsultaCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaCuentasActionPerformed
         // TODO add your handling code here:
-        AdministrarCuentas ad=new AdministrarCuentas();
-        IniciaSesion  i=new IniciaSesion();
-       // System.out.println(ad.getTelefono());
-      //  ad.setTelefono(this.getTelefono());
+        AdministrarCuentas ad = new AdministrarCuentas();
+        IniciaSesion i = new IniciaSesion();
+        // System.out.println(ad.getTelefono());
+        //  ad.setTelefono(this.getTelefono());
         ad.setVisible(true);
     }//GEN-LAST:event_ConsultaCuentasActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Historial h= new Historial();
+        Historial h = new Historial();
         h.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
      */
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ConsultaCuentas;
