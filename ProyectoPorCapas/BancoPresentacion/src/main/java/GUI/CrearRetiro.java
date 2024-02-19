@@ -7,6 +7,8 @@ package GUI;
 
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 
 /**
@@ -23,9 +25,14 @@ public class CrearRetiro extends javax.swing.JFrame {
      */
     public CrearRetiro() {
         initComponents();
+        centraVentana();
     }
     controlCuenta ctl = new controlCuenta(conexion);
-
+    private void limpiar() {
+        txtImporteARetirar.setText("");
+        
+        txtImporteARetirar.requestFocus();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -46,6 +53,12 @@ public class CrearRetiro extends javax.swing.JFrame {
         txtImporteARetirar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtImporteARetirar.setText("Importe a retirar:");
 
+        importeARetirar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                importeARetirarKeyTyped(evt);
+            }
+        });
+
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Retiro sin tarjeta crear folio");
 
@@ -58,6 +71,11 @@ public class CrearRetiro extends javax.swing.JFrame {
         });
 
         botonSalir.setText("Salir");
+        botonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,17 +86,17 @@ public class CrearRetiro extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(botonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(41, 41, 41)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(79, 79, 79)
+                        .addGap(66, 66, 66)
                         .addComponent(txtImporteARetirar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(importeARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
+                        .addGap(114, 114, 114)
                         .addComponent(botonAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addContainerGap(112, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,13 +105,13 @@ public class CrearRetiro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(botonSalir))
-                .addGap(83, 83, 83)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtImporteARetirar)
                     .addComponent(importeARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addComponent(botonAceptar)
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(93, Short.MAX_VALUE))
         );
 
         pack();
@@ -102,7 +120,54 @@ public class CrearRetiro extends javax.swing.JFrame {
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
         ctl.generarFolioYContrasena(this, sesionUsuario.getNumeroCuenta());
+        limpiar();
     }//GEN-LAST:event_botonAceptarActionPerformed
+
+    private void importeARetirarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_importeARetirarKeyTyped
+        // TODO add your handling code here:
+                if(importeARetirar.getText().length() >= 10){
+        evt.consume();
+    }
+            int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+
+    if (importeARetirar.getText().trim().length() == 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_importeARetirarKeyTyped
+
+    private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
+        // TODO add your handling code here:
+        opcionesCliente op=new opcionesCliente();
+        op.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_botonSalirActionPerformed
+  private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
 
     /**
      * @param args the command line arguments

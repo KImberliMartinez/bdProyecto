@@ -10,6 +10,8 @@ import com.mycompany.bancodominio.DAO.TransaccionDAO;
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
 import com.mycompany.bancopersistencia.ConexionBD;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.*;
@@ -39,6 +41,7 @@ public class transferencias extends javax.swing.JFrame {
     // saldoDisponibleA = saldoDisponibleActualizado
     public transferencias() {
         initComponents();
+        centraVentana();
         c = new controlCuenta(conexion);
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
      id=c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
@@ -85,12 +88,25 @@ public class transferencias extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         NumCuentaOrigen = new javax.swing.JTextField();
         ComboBox1 = new javax.swing.JComboBox<>();
+        Cancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Cantidad a transferir:");
 
+        cantidadATrasnferir.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cantidadATrasnferirKeyTyped(evt);
+            }
+        });
+
         jLabel2.setText("Cuenta a la que se transferira:");
+
+        cuentaQueSeTransferira.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cuentaQueSeTransferiraKeyTyped(evt);
+            }
+        });
 
         saldoDisponible.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         saldoDisponible.setText("2000");
@@ -126,6 +142,13 @@ public class transferencias extends javax.swing.JFrame {
             }
         });
 
+        Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -141,9 +164,6 @@ public class transferencias extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(botonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(botonRealizar))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel5)
@@ -155,7 +175,12 @@ public class transferencias extends javax.swing.JFrame {
                             .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(ComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))))
+                                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(127, 127, 127)
+                        .addComponent(botonRealizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(Cancelar)))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -182,20 +207,32 @@ public class transferencias extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(botonRealizar)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(botonRealizar)
+                    .addComponent(Cancelar))
                 .addGap(20, 20, 20))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+private void limpiar() {
+        cantidadATrasnferir.setText("");
+        cuentaQueSeTransferira.setText("");
+        NumCuentaOrigen.setText("");
+        cantidadATrasnferir.requestFocus();
+    }
     private void botonRealizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRealizarActionPerformed
         String palabra1 = cantidadATrasnferir.getText();
+        int cantidad=Integer.parseInt(palabra1);
         String palabra2 = NumCuentaOrigen.getText();
         String palabra3 = cuentaQueSeTransferira.getText();
         if (palabra1.isEmpty() || palabra2.isEmpty() || palabra3.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
         } else {
+              if(cantidad<1||cantidad>10000){
+            JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
+
+            }
             realizarTransferencia();
         }
 
@@ -206,6 +243,7 @@ public class transferencias extends javax.swing.JFrame {
         opcionesCliente op = new opcionesCliente();
         op.setVisible(true);
         this.setVisible(false);
+        dispose();
     }//GEN-LAST:event_botonSalirActionPerformed
 
     private void NumCuentaOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumCuentaOrigenActionPerformed
@@ -220,6 +258,61 @@ public class transferencias extends javax.swing.JFrame {
         //actualizar();
     }//GEN-LAST:event_ComboBox1ActionPerformed
 
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        // TODO add your handling code here:
+        limpiar();
+    }//GEN-LAST:event_CancelarActionPerformed
+
+    private void cantidadATrasnferirKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cantidadATrasnferirKeyTyped
+        // TODO add your handling code here:
+          if(cantidadATrasnferir.getText().length() >=10){
+        evt.consume();
+    }
+            int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+
+    if (cantidadATrasnferir.getText().trim().length() == 10) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_cantidadATrasnferirKeyTyped
+
+    private void cuentaQueSeTransferiraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cuentaQueSeTransferiraKeyTyped
+        // TODO add your handling code here:
+                    int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+    }//GEN-LAST:event_cuentaQueSeTransferiraKeyTyped
+private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
     /**
      * @param args the command line arguments
      */
@@ -315,6 +408,7 @@ public class transferencias extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Cancelar;
     private javax.swing.JComboBox<String> ComboBox1;
     private javax.swing.JTextField NumCuentaOrigen;
     private javax.swing.JButton botonRealizar;

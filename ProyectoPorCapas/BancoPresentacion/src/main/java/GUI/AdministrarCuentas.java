@@ -183,6 +183,8 @@ SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
         opcionesCliente op= new opcionesCliente();
+        String tel=Long.toString(SesionUsuario.getInstancia().getTelefono());
+        op.setTelefono(tel);
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed

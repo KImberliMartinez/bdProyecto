@@ -8,6 +8,8 @@ package GUI;
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
 import com.mycompany.bancopersistencia.ConexionBD;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -27,6 +29,7 @@ private controlCuenta c;
      */
     public depositos() {
         initComponents();
+        centraVentana();
          c = new controlCuenta(conexion);
     SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
      id=c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
@@ -52,6 +55,32 @@ private controlCuenta c;
            
         }
 }
+   private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
+   private void limpiar() {
+        txCantidad.setText("");
+        
+        txCantidad.requestFocus();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,7 +94,7 @@ private controlCuenta c;
         txCantidad = new javax.swing.JTextField();
         aceptar = new javax.swing.JButton();
         cancelar = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        Salir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -74,6 +103,11 @@ private controlCuenta c;
         txCantidad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txCantidadActionPerformed(evt);
+            }
+        });
+        txCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txCantidadKeyTyped(evt);
             }
         });
 
@@ -85,11 +119,16 @@ private controlCuenta c;
         });
 
         cancelar.setText("Cacelar");
-
-        jButton3.setText("Salir");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                cancelarActionPerformed(evt);
+            }
+        });
+
+        Salir.setText("Salir");
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
             }
         });
 
@@ -119,14 +158,14 @@ private controlCuenta c;
                         .addComponent(cancelar))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton3)))
+                        .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(115, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
+                .addComponent(Salir)
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -145,9 +184,12 @@ private controlCuenta c;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+           opcionesCliente op=new opcionesCliente();
+        op.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_SalirActionPerformed
 
     private void txCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txCantidadActionPerformed
         // TODO add your handling code here:
@@ -158,6 +200,32 @@ private controlCuenta c;
         // TODO add your handling code here:
          DepositarSeleccionado();
     }//GEN-LAST:event_aceptarActionPerformed
+
+    private void txCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txCantidadKeyTyped
+        // TODO add your handling code here:
+            if(txCantidad.getText().length() >=10){
+        evt.consume();
+    }
+            int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+
+    if (txCantidad.getText().trim().length() == 10) {
+        evt.consume();
+    }
+
+    }//GEN-LAST:event_txCantidadKeyTyped
+
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        // TODO add your handling code here:
+     
+        
+    }//GEN-LAST:event_cancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -196,9 +264,9 @@ private controlCuenta c;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> ComboBox1;
+    private javax.swing.JButton Salir;
     private javax.swing.JButton aceptar;
     private javax.swing.JButton cancelar;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField txCantidad;

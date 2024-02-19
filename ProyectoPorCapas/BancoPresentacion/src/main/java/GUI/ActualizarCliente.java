@@ -9,6 +9,8 @@ import com.mycompany.bancodominio.DAO.ClienteDAO;
 import com.mycompany.bancodominio.dtos.ClienteNuevoDTO;
 import com.mycompany.bancopersistencia.ConexionBD;
 import com.mycompany.bancopersistencia.PersistenciaException;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -29,6 +31,7 @@ public class ActualizarCliente extends javax.swing.JFrame {
      */
     public ActualizarCliente() {
         initComponents();
+        centraVentana();
         try {
             conexion = ConexionBD.obtenerConexion();
             clienteDAO = new ClienteDAO(conexion);
@@ -224,8 +227,30 @@ public class ActualizarCliente extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        opcionesCliente op=new opcionesCliente();
+        op.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+  private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
 
     /**
      * @param args the command line arguments

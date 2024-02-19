@@ -10,6 +10,8 @@ import com.mycompany.bancodominio.dtos.ClienteNuevoDTO;
 import com.mycompany.banconegocio.controlCliente;
 import com.mycompany.bancopersistencia.ConexionBD;
 import com.mycompany.bancopersistencia.PersistenciaException;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import static java.lang.Integer.parseInt;
 import java.math.BigInteger;
@@ -38,6 +40,7 @@ public class Registro extends javax.swing.JFrame {
     }
     public Registro() {
         initComponents();
+        centraVentana();
         try{
             conexion=ConexionBD.obtenerConexion();
             clienteDAO=new ClienteDAO(conexion);
@@ -83,6 +86,7 @@ public class Registro extends javax.swing.JFrame {
         tTel = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         tPass = new javax.swing.JTextField();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -142,6 +146,11 @@ public class Registro extends javax.swing.JFrame {
         tTel.setColumns(2);
         tTel.setToolTipText("10 digitos");
         tTel.setName(""); // NOI18N
+        tTel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tTelActionPerformed(evt);
+            }
+        });
         tTel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tTelKeyTyped(evt);
@@ -150,6 +159,11 @@ public class Registro extends javax.swing.JFrame {
 
         jLabel9.setText("Password:");
 
+        tPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tPassActionPerformed(evt);
+            }
+        });
         tPass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 tPassKeyTyped(evt);
@@ -178,7 +192,9 @@ public class Registro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(tFN, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(tFN, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE))))
                 .addContainerGap(56, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(2, 2, 2)
@@ -237,7 +253,9 @@ public class Registro extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(tFN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
                 .addComponent(jLabel7)
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -375,6 +393,34 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
     private void tDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tDKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_tDKeyTyped
+  private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
+
+    private void tTelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tTelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tTelActionPerformed
+
+    private void tPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tPassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tPassActionPerformed
 
     /**
      * @param args the command line arguments
@@ -414,6 +460,7 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agregar;
     private javax.swing.JButton Cancelar;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

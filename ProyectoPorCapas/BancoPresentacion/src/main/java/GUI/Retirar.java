@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import com.mycompany.banconegocio.SesionUsuario;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 /**
  *
  * @author delll
@@ -22,6 +24,7 @@ private Connection conexion;
      */
     public Retirar() {
         initComponents();
+        centraVentana();
     }
 
     /**
@@ -37,6 +40,7 @@ private Connection conexion;
         botonRetirarDinero = new javax.swing.JButton();
         botonSalir = new javax.swing.JButton();
         montoDineroARetirar = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,6 +54,24 @@ private Connection conexion;
         });
 
         botonSalir.setText("Salir");
+        botonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSalirActionPerformed(evt);
+            }
+        });
+
+        montoDineroARetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                montoDineroARetirarActionPerformed(evt);
+            }
+        });
+        montoDineroARetirar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                montoDineroARetirarKeyTyped(evt);
+            }
+        });
+
+        jLabel1.setText("Retiro sin tarjeta");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,31 +80,35 @@ private Connection conexion;
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(145, 145, 145)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botonRetirarDinero)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(montoDineroARetirar)))))
+                        .addGap(115, 115, 115)
+                        .addComponent(montoDineroARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(165, 165, 165)
+                        .addGap(152, 152, 152)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(141, 141, 141)
+                        .addComponent(botonRetirarDinero))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(botonSalir)))
-                .addContainerGap(156, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(59, 59, 59)
-                .addComponent(montoDineroARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(montoDineroARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(botonRetirarDinero)
-                .addGap(27, 27, 27)
-                .addComponent(botonSalir)
-                .addContainerGap(68, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(botonSalir))
         );
 
         pack();
@@ -124,6 +150,56 @@ private Connection conexion;
         }
     }//GEN-LAST:event_botonRetirarDineroActionPerformed
 
+    private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
+        // TODO add your handling code here:
+        Inicio i= new Inicio();
+        i.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_botonSalirActionPerformed
+
+    private void montoDineroARetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_montoDineroARetirarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_montoDineroARetirarActionPerformed
+
+    private void montoDineroARetirarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_montoDineroARetirarKeyTyped
+        // TODO add your handling code here:
+                 if(montoDineroARetirar.getText().length() >= 10){
+        evt.consume();
+    }
+            int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+
+    if (montoDineroARetirar.getText().trim().length() == 10) {
+        evt.consume();
+    }
+    
+    }//GEN-LAST:event_montoDineroARetirarKeyTyped
+private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
     /**
      * @param args the command line arguments
      */
@@ -163,6 +239,7 @@ private Connection conexion;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonRetirarDinero;
     private javax.swing.JButton botonSalir;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField montoDineroARetirar;
     // End of variables declaration//GEN-END:variables

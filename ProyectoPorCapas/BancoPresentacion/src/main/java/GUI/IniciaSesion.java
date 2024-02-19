@@ -9,6 +9,8 @@ import com.mycompany.banconegocio.controlCuenta;
 import javax.swing.JOptionPane;
 import com.mycompany.banconegocio.*;
 import com.mycompany.bancopersistencia.ConexionBD;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -28,7 +30,7 @@ public class IniciaSesion extends javax.swing.JFrame {
      */
     public IniciaSesion() {
         initComponents();
-
+        centraVentana();
         usuario = txtTel.getText();
         try {
             conexion = ConexionBD.obtenerConexion();
@@ -64,7 +66,7 @@ public class IniciaSesion extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
         Continuar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Salir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,9 +81,20 @@ public class IniciaSesion extends javax.swing.JFrame {
                 txtTelActionPerformed(evt);
             }
         });
+        txtTel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelKeyTyped(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
         jLabel3.setText("Password:");
+
+        jPasswordField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jPasswordField1KeyTyped(evt);
+            }
+        });
 
         Continuar.setText("Continuar");
         Continuar.addActionListener(new java.awt.event.ActionListener() {
@@ -90,7 +103,12 @@ public class IniciaSesion extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Salir");
+        Salir.setText("Salir");
+        Salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -114,7 +132,7 @@ public class IniciaSesion extends javax.swing.JFrame {
                 .addContainerGap(98, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton2)
+                .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Continuar)
                 .addContainerGap())
@@ -135,7 +153,7 @@ public class IniciaSesion extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Continuar)
-                    .addComponent(jButton2))
+                    .addComponent(Salir))
                 .addContainerGap())
         );
 
@@ -168,22 +186,61 @@ public class IniciaSesion extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }
 
-//        long telefono = Long.parseLong(txtTel.getText());
-//        String contrasena = new String(jPasswordField1.getPassword());
-//        int numeroCuenta = cuenta.consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
-//        if (numeroCuenta != -1) {
-        // El usuario existe en la base de datos y tiene una cuenta asociada
-        opcionesCliente op = new opcionesCliente();
-        op.setTelefono(txtTel.getText());
-        op.setVisible(true);
-        dispose();
-//        } else {
-//             El usuario no existe en la base de datos o los credenciales son incorrectos
-//            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-//        }
-
     }//GEN-LAST:event_ContinuarActionPerformed
 
+    private void txtTelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelKeyTyped
+        // TODO add your handling code here:
+         if(txtTel.getText().length() >= 10){
+        evt.consume();
+    }
+            int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+
+    if (txtTel.getText().trim().length() == 10) {
+        evt.consume();
+    }
+           
+    }//GEN-LAST:event_txtTelKeyTyped
+
+    private void jPasswordField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyTyped
+        // TODO add your handling code here:
+         if(jPasswordField1.getText().length() >= 8){
+        evt.consume();
+    }
+    }//GEN-LAST:event_jPasswordField1KeyTyped
+
+    private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
+        // TODO add your handling code here:
+        Inicio i=new Inicio();
+        i.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_SalirActionPerformed
+private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
     /**
      * @param args the command line arguments
      */
@@ -222,7 +279,7 @@ public class IniciaSesion extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Continuar;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton Salir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

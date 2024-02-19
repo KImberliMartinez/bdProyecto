@@ -6,6 +6,8 @@
 package GUI;
 
 import com.mycompany.banconegocio.SesionUsuario;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 /**
  *
@@ -21,6 +23,7 @@ public class opcionesCliente extends javax.swing.JFrame {
      */
     public opcionesCliente() {
         initComponents();
+        centraVentana();
         IniciaSesion i = new IniciaSesion();
         System.out.println("Pantalla opClientes" + i.usuario);
 
@@ -209,7 +212,26 @@ public class opcionesCliente extends javax.swing.JFrame {
         d.setVisible(true);
         dispose();
     }//GEN-LAST:event_DepositarActionPerformed
+private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
     /**
      * @param args the command line arguments
      */

@@ -117,8 +117,8 @@ public class controlCuenta {
 
     public void generarFolioYContrasena(Component parentComponent, int numeroCuenta) {
         Random random = new Random();
-        String folio = Integer.toString(random.nextInt(10000)); // Genera un folio aleatorio de 4 dígitos
-        String contrasena = String.format("%08d", random.nextInt(100000000)); // Genera una contraseña aleatoria de 8 dígitos
+        String folio = Integer.toString(random.nextInt(1000)); // Genera un folio aleatorio de 4 dígitos
+        String contrasena = String.format("%08d", random.nextInt(10000000)); // Genera una contraseña aleatoria de 8 dígitos
 
         try {
             Connection conexion = ConexionBD.obtenerConexion();

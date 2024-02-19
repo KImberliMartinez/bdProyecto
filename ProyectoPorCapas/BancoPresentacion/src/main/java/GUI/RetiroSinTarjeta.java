@@ -6,6 +6,8 @@
 package GUI;
 
 import com.mycompany.banconegocio.controlCuenta;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
 /**
@@ -19,6 +21,7 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
      */
     public RetiroSinTarjeta() {
         initComponents();
+        centraVentana();
     }
 
     /**
@@ -44,13 +47,31 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
 
         jLabel2.setText("Num de folio:");
 
-        numFolio.setText("jTextField1");
+        numFolio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                numFolioActionPerformed(evt);
+            }
+        });
+        numFolio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                numFolioKeyTyped(evt);
+            }
+        });
 
         jLabel3.setText("Password:");
 
-        contraseña.setText("jPasswordField1");
+        contraseña.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                contraseñaKeyTyped(evt);
+            }
+        });
 
         botonSalir.setText("Salir");
+        botonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonSalirActionPerformed(evt);
+            }
+        });
 
         botonContinuar.setText("Continuar");
         botonContinuar.addActionListener(new java.awt.event.ActionListener() {
@@ -70,20 +91,18 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(botonSalir)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(contraseña)
-                                    .addComponent(numFolio)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
-                                .addComponent(botonContinuar)))))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(contraseña, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+                            .addComponent(numFolio)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(51, Short.MAX_VALUE)
+                        .addComponent(botonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addComponent(botonContinuar)))
                 .addGap(76, 76, 76))
         );
         layout.setVerticalGroup(
@@ -118,6 +137,71 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_botonContinuarActionPerformed
 
+    private void numFolioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_numFolioActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_numFolioActionPerformed
+
+    private void numFolioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_numFolioKeyTyped
+        // TODO add your handling code here:
+              if(numFolio.getText().length() >=4){
+        evt.consume();
+    }
+            int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+
+    if (numFolio.getText().trim().length() == 4) {
+        evt.consume();
+    }
+    }//GEN-LAST:event_numFolioKeyTyped
+
+    private void contraseñaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_contraseñaKeyTyped
+        // TODO add your handling code here:
+         if(contraseña.getText().length() >= 8){
+        evt.consume();
+    }
+          int key = evt.getKeyChar();
+
+    boolean numeros = key >= 48 && key <= 57;
+        
+    if (!numeros)
+    {
+        evt.consume();
+    }
+    }//GEN-LAST:event_contraseñaKeyTyped
+
+    private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
+        // TODO add your handling code here:
+        opcionesCliente op=new opcionesCliente();
+        op.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_botonSalirActionPerformed
+private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
     /**
      * @param args the command line arguments
      */
