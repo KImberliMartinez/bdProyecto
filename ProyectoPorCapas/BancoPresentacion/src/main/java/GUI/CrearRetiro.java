@@ -5,15 +5,9 @@
  */
 package GUI;
 
-import com.mycompany.bancopersistencia.ConexionBD;
+import com.mycompany.banconegocio.SesionUsuario;
+import com.mycompany.banconegocio.controlCuenta;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import javax.swing.JOptionPane;
-
 
 /**
  *
@@ -21,7 +15,8 @@ import javax.swing.JOptionPane;
  */
 public class CrearRetiro extends javax.swing.JFrame {
 
-    private Map<String, String> foliosYContrasenas = new HashMap<>();
+    private Connection conexion;
+    private SesionUsuario iniciarSesion;
 
     /**
      * Creates new form CrearRetiro
@@ -29,6 +24,7 @@ public class CrearRetiro extends javax.swing.JFrame {
     public CrearRetiro() {
         initComponents();
     }
+    controlCuenta ctl = new controlCuenta(conexion);
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,34 +100,9 @@ public class CrearRetiro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
-        // TODO add your handling code here:
+        SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+        ctl.generarFolioYContrasena(this, sesionUsuario.getNumeroCuenta());
     }//GEN-LAST:event_botonAceptarActionPerformed
-
-    private void generarFolioYContrasena() {
-        Random random = new Random();
-        String folio = Integer.toString(random.nextInt(10000)); // Genera un folio aleatorio de 4 dígitos
-        String contrasena = Integer.toString(random.nextInt(10000)); // Genera una contraseña aleatoria de 4 dígitos
-
-        // Almacena el folio y la contraseña en el HashMap
-        foliosYContrasenas.put(folio, contrasena);
-        
-         try {
-            Connection conexion = ConexionBD.obtenerConexion();
-            String consulta = "INSERT INTO retirossincuenta (Folio_de_operacion, Contraseña, ESTADOS, Fecha) VALUES (?, ?, ?, ?)";
-            PreparedStatement declaracion = conexion.prepareStatement(consulta);
-            declaracion.setInt(1, Integer.parseInt(folio));
-            declaracion.setString(2, contrasena);
-            declaracion.setString(3, "pendiente"); // Estado inicial
-            declaracion.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Fecha actual
-            declaracion.executeUpdate();
-            conexion.close(); // Cerrar conexión
-            JOptionPane.showMessageDialog(this, "Retiro creado correctamente. Folio: " + folio + "Contraseña: " + contrasena);
-        } catch (SQLException e) {
-            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
-            JOptionPane.showMessageDialog(this, "Error al crear el retiro");
-        }
-    }
-    
 
     /**
      * @param args the command line arguments

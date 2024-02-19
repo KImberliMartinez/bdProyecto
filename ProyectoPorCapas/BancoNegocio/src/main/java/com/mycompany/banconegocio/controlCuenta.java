@@ -13,6 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.mycompany.bancopersistencia.ConexionBD;
+import java.awt.Component;
+import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -85,12 +89,13 @@ public class controlCuenta {
             return -1;
         }
     }
+
     public int obtenerSaldoDisponible(int numeroCuenta) {
         int saldoDisponible = 0;
         String query = "SELECT Saldo FROM Cuentas WHERE Numero_Cuenta = ?";
-        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+        try ( PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setInt(1, numeroCuenta);
-            try (ResultSet rs = pstmt.executeQuery()) {
+            try ( ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     saldoDisponible = rs.getInt("Saldo");
                 }
@@ -100,10 +105,11 @@ public class controlCuenta {
         }
         return saldoDisponible;
 
-}
+    }
+
     public boolean actualizarSaldoCliente(int numeroCuenta, double nuevoSaldo) {
         String query = "UPDATE Cuentas SET Saldo = ? WHERE Numero_Cuenta = ?";
-        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
+        try ( PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setDouble(1, nuevoSaldo);
             pstmt.setInt(2, numeroCuenta);
             int filasActualizadas = pstmt.executeUpdate();
@@ -113,5 +119,66 @@ public class controlCuenta {
             return false;
         }
     }
+
+    public void generarFolioYContrasena(Component parentComponent, int numeroCuenta) {
+        Random random = new Random();
+        String folio = Integer.toString(random.nextInt(10000)); // Genera un folio aleatorio de 4 dígitos
+        String contrasena = String.format("%08d", random.nextInt(100000000)); // Genera una contraseña aleatoria de 8 dígitos
+
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            String consulta = "INSERT INTO retirossincuenta (Numero_Cuenta,Folio_de_operacion, Contraseña, ESTADOS, Fecha) VALUES (?,?, ?, ?, ?)";
+            PreparedStatement declaracion = conexion.prepareStatement(consulta);
+            declaracion.setInt(1, numeroCuenta);
+            declaracion.setInt(2, Integer.parseInt(folio));
+            declaracion.setString(3, contrasena);
+            declaracion.setString(4, "pendiente"); // Estado inicial
+            declaracion.setDate(5, new java.sql.Date(System.currentTimeMillis())); // Fecha actual
+            declaracion.executeUpdate();
+            conexion.close(); // Cerrar conexión
+            JOptionPane.showMessageDialog(parentComponent, "Retiro creado correctamente\nFolio: " + folio + "\nContraseña: " + contrasena, "Folio Creado", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+    }
+    public static boolean validarFolio(String folio) {
+        boolean existe = false;
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            String consulta = "SELECT * FROM retirossincuenta WHERE Folio_de_operacion = ?";
+            PreparedStatement declaracion = conexion.prepareStatement(consulta);
+            declaracion.setString(1, folio);
+            ResultSet resultado = declaracion.executeQuery();
+            if (resultado.next()) {
+                existe = true;
+            }
+            conexion.close(); // Cerrar conexión
+        } catch (SQLException e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+        }
+        return existe;
+    }
     
+     public static String obtenerInformacionFolio(String folio) {
+        StringBuilder informacion = new StringBuilder();
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            String consulta = "SELECT * FROM retirossincuenta WHERE Folio_de_operacion = ?";
+            PreparedStatement declaracion = conexion.prepareStatement(consulta);
+            declaracion.setString(1, folio);
+            ResultSet resultado = declaracion.executeQuery();
+            if (resultado.next()) {
+                informacion.append("Información del folio ").append(folio).append(":\n");
+                informacion.append("Estado: ").append(resultado.getString("ESTADOS")).append("\n"); 
+                informacion.append("Fecha: ").append(resultado.getDate("Fecha")).append("\n"); 
+            } else {
+                informacion.append("No se encontró información para el folio ").append(folio);
+            }
+            conexion.close(); // Cerrar conexión
+        } catch (SQLException e) {
+            informacion.append("Error al conectar con la base de datos: ").append(e.getMessage());
+        }
+        return informacion.toString();
+    }
+
 }

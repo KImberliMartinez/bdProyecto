@@ -5,6 +5,9 @@
  */
 package GUI;
 
+import com.mycompany.banconegocio.controlCuenta;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author delll
@@ -50,6 +53,11 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
         botonSalir.setText("Salir");
 
         botonContinuar.setText("Continuar");
+        botonContinuar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonContinuarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,6 +108,15 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void botonContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContinuarActionPerformed
+        String folio = numFolio.getText();
+         if (controlCuenta.validarFolio(folio)) {
+             JOptionPane.showMessageDialog(this, controlCuenta.obtenerInformacionFolio(folio), "Información del Folio", JOptionPane.INFORMATION_MESSAGE);
+    } else {
+        JOptionPane.showMessageDialog(this, "El folio ingresado no es válido", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_botonContinuarActionPerformed
 
     /**
      * @param args the command line arguments
