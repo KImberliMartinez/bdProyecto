@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import com.mycompany.banconegocio.controlCuenta;
 import javax.swing.JOptionPane;
 
 
@@ -15,12 +16,13 @@ import javax.swing.JOptionPane;
  */
 public class IniciaSesion extends javax.swing.JFrame {
    public String usuario;
+  controlCuenta cuenta;
     /**
      * Creates new form IniciaSesion
      */
     public IniciaSesion() {
         initComponents();
-             usuario=txtTel.getText();
+          usuario=txtTel.getText();
     }
 
     public String getUsuario() {
@@ -134,19 +136,19 @@ public class IniciaSesion extends javax.swing.JFrame {
 
     private void ContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContinuarActionPerformed
        // TODO add your handling code here:
-        long telefono = Long.parseLong(txtTel.getText());
-        String contrasena = new String(jPasswordField1.getPassword());
-        int numeroCuenta = consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
-        if (numeroCuenta != -1) {
+//        long telefono = Long.parseLong(txtTel.getText());
+//        String contrasena = new String(jPasswordField1.getPassword());
+//        int numeroCuenta = cuenta.consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
+//        if (numeroCuenta != -1) {
             // El usuario existe en la base de datos y tiene una cuenta asociada
-            opcionesCliente op = new opcionesCliente();
-            op.setTelefono(txtTel.getText());
-            op.setVisible(true);
-            dispose();
-        } else {
-            // El usuario no existe en la base de datos o los credenciales son incorrectos
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-        }
+            opcionesCliente op=new opcionesCliente();
+         op.setTelefono(txtTel.getText());
+         op.setVisible(true);
+        dispose();
+//        } else {
+//             El usuario no existe en la base de datos o los credenciales son incorrectos
+//            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+//        }
     }//GEN-LAST:event_ContinuarActionPerformed
 
     /**
