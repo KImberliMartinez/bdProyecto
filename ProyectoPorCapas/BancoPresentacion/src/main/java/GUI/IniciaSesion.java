@@ -5,33 +5,40 @@
  */
 package GUI;
 
+import com.mycompany.banconegocio.controlCuenta;
 import javax.swing.JOptionPane;
 import com.mycompany.banconegocio.*;
 import com.mycompany.bancopersistencia.ConexionBD;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
 /**
  *
  * @author delll
  */
 public class IniciaSesion extends javax.swing.JFrame {
-   public String usuario;
-   private Connection conexion;
-   private SesionUsuario iniciarSesion;
+
+    public String usuario;
+    private Connection conexion;
+    private SesionUsuario iniciarSesion;
+    controlCuenta cuenta;
+
     /**
      * Creates new form IniciaSesion
      */
     public IniciaSesion() {
         initComponents();
-             usuario=txtTel.getText();
-              try {
+
+        usuario = txtTel.getText();
+        try {
             conexion = ConexionBD.obtenerConexion();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
         }
+
+        usuario = txtTel.getText();
+
     }
 
     public String getUsuario() {
@@ -41,9 +48,6 @@ public class IniciaSesion extends javax.swing.JFrame {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
-    
-  
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -144,8 +148,9 @@ public class IniciaSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_txtTelActionPerformed
 
     private void ContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContinuarActionPerformed
-       // TODO add your handling code here:
-       controlCuenta controlCuenta = new controlCuenta(conexion);
+        // TODO add your handling code here:
+
+        controlCuenta controlCuenta = new controlCuenta(conexion);
         long telefono = Long.parseLong(txtTel.getText());
         String contrasena = new String(jPasswordField1.getPassword());
         //
@@ -162,6 +167,21 @@ public class IniciaSesion extends javax.swing.JFrame {
             // El usuario no existe en la base de datos o los credenciales son incorrectos
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }
+
+//        long telefono = Long.parseLong(txtTel.getText());
+//        String contrasena = new String(jPasswordField1.getPassword());
+//        int numeroCuenta = cuenta.consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
+//        if (numeroCuenta != -1) {
+        // El usuario existe en la base de datos y tiene una cuenta asociada
+        opcionesCliente op = new opcionesCliente();
+        op.setTelefono(txtTel.getText());
+        op.setVisible(true);
+        dispose();
+//        } else {
+//             El usuario no existe en la base de datos o los credenciales son incorrectos
+//            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+//        }
+
     }//GEN-LAST:event_ContinuarActionPerformed
 
     /**

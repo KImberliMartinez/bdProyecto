@@ -66,7 +66,8 @@ public class controlCuenta {
         }
     }
 
-    public int consultarNumeroCuenta(long telefono, String contrasena) {
+    
+     public int consultarNumeroCuenta(long telefono, String contrasena) {
         String query = "SELECT id_cliente FROM usuarios WHERE telefono = ? AND contrasena = ?";
         try ( Connection conexion = obtenerConexion();  PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setLong(1, telefono);
