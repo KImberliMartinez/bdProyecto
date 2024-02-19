@@ -9,8 +9,10 @@ import com.mycompany.bancodominio.Cuenta;
 import com.mycompany.bancodominio.DAO.CuentaDAO;
 import com.mycompany.bancodominio.DAO.TransaccionDAO;
 import com.mycompany.bancodominio.dtos.UsuarioDTO;
+import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
 import com.mycompany.bancopersistencia.ConexionBD;
+import java.awt.BorderLayout;
 import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,6 +24,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,9 +33,9 @@ import javax.swing.table.DefaultTableModel;
  * @author delll
  */
 public final class AdministrarCuentas extends javax.swing.JFrame {
-    private String Tel;
+        private DefaultTableModel tableModel;
     private int id;
-    private CuentaDAO cc;
+    private controlCuenta c;
      private Connection conexion;
    
     /**
@@ -39,89 +43,36 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
      */
     public AdministrarCuentas()  {
         initComponents();
-        try {
-            conexion = ConexionBD.obtenerConexion();
-             cc = new CuentaDAO(conexion);
-        } catch (SQLException ex) {
-            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-           
-        IniciaSesion i= new IniciaSesion();
-        Tel=i.usuario;
-        
-        System.out.println("pantalla admiCuentas"+Tel);
-        try {
-            id=cc.consultarClientesPortelefono(Tel);
-            lista(id);
-           
-        } catch (SQLException ex) {
-            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public AdministrarCuentas(Connection conexion) {
-        this.conexion = conexion;
-    }
+     c = new controlCuenta(conexion);
+SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+      id=c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
     
 
-    public void setTelefono(String Telefono) {
-        this.Tel = Telefono;
-        txUsuario.setText(Telefono);
+        // Consultar y llenar la tabla con las cuentas del cliente
+      //  consultarCuentasPorCliente(id); // ID del cliente (reemplaza con el valor adecuado)
     }
-      public String getTelefono(){
-         String tel=txUsuario.getText();
-        return tel ;
-    }
-    
 
-       public List<Cuenta> lista(int idC) throws SQLException {
-        List<Cuenta> lista = new ArrayList<>();
-        String query = "SELECT * FROM Cuentas WHERE id_cliente = ?";
-        try (PreparedStatement pstmt = conexion.prepareStatement(query)) {
-            pstmt.setInt(1, idC);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                  int idCuenta= rs.getInt("Numero_cuenta");
-                   String fecha= rs.getString("Fecha_de_apertura");
-                    int Saldo=rs.getInt("saldo");
-                    int cliente=rs.getInt("id_cliente");
-                    System.out.println(idCuenta);
-                    System.out.println(fecha);
-                    System.out.println(Saldo);
-                    System.out.println(cliente);
-                    Cuenta c=new Cuenta(idCuenta, fecha, Saldo, cliente);
-                    lista.add(c);
-                }
+    private void consultarCuentasPorCliente(int idCliente) {
+        try (
+            PreparedStatement statement = conexion.prepareStatement("SELECT * FROM Cuentas WHERE id_cliente = ?")) {
+            statement.setInt(1, idCliente);
+            ResultSet resultSet = statement.executeQuery();
+            // Llenar la tabla con los resultados de la consulta
+            while (resultSet.next()) {
+                int numeroCuenta = resultSet.getInt("numero_cuenta");
+                String fecha = resultSet.getString("fecha_de_apertura");
+                int saldo = resultSet.getInt("saldo");
+                int idC=resultSet.getInt("id_cliente");
+                System.out.println(""+numeroCuenta+""+fecha+""+saldo+""+idC);
+                //tableModel.addRow(new Object[]{numeroCuenta, fecha, saldo,idC});
             }
-        }catch(SQLException e){
-            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, e);
-        }
-        return lista;
-    }
 
-    public void mostrarRegistros() {
-        try {
-            List<Cuenta> listaCuentas = lista(id);
-             DefaultTableModel modeloTabla =  (DefaultTableModel) this.tCuentas.getModel();
-        modeloTabla.setRowCount(0);
-        listaCuentas.forEach(cuentas -> {
-            Object[] filas = new Object[4];
-            filas[0] = cuentas.getNumeroCuenta();
-            filas[1] = cuentas.getFechaApertura();
-            filas[2] = cuentas.getSaldo();
-            filas[3]=cuentas.getIdCliente();
-               modeloTabla.addRow(filas);
-        });
         } catch (SQLException ex) {
-            Logger.getLogger(AdministrarCuentas.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
-       
     }
-    
-    
-    
-  
 
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -135,7 +86,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tCuentas = new javax.swing.JTable();
         txUsuario = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        agregarNuevo = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
 
@@ -163,10 +114,10 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tCuentas);
 
-        jButton1.setText("Agregar Nueva");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        agregarNuevo.setText("Agregar Nueva");
+        agregarNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                agregarNuevoActionPerformed(evt);
             }
         });
 
@@ -199,7 +150,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(67, 67, 67)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(agregarNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(Cancelar)
                 .addContainerGap(71, Short.MAX_VALUE))
@@ -221,7 +172,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(agregarNuevo)
                     .addComponent(Cancelar))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
@@ -239,15 +190,16 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
         // TODO add your handling code here:
         CancelarCuenta c= new CancelarCuenta();
-        c.setTelefono(Tel);
-        c.setVisible(true);
+     //   c.setTelefono(SesionUsuario.getInstancia().getTelefono());
+         c.setVisible(true);
         dispose();
     }//GEN-LAST:event_CancelarActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void agregarNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarNuevoActionPerformed
         // TODO add your handling code here:
-         
-    }//GEN-LAST:event_jButton1ActionPerformed
+         c.agregarCuenta(id);
+         JOptionPane.showMessageDialog(this, "Cuenta Agregada");
+    }//GEN-LAST:event_agregarNuevoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -280,7 +232,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-               
+              
                     new AdministrarCuentas().setVisible(true);
                 
             }
@@ -290,7 +242,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
     private javax.swing.JButton Salir;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton agregarNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tCuentas;

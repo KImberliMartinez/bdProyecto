@@ -45,6 +45,11 @@ public class Inicio extends javax.swing.JFrame {
         });
 
         botonRetirarDineroSinTarjeta.setText("Retirar dinero Sin Tarjeta");
+        botonRetirarDineroSinTarjeta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRetirarDineroSinTarjetaActionPerformed(evt);
+            }
+        });
 
         botonRegistrarCliente.setText("Registrar Cliente");
         botonRegistrarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -90,6 +95,7 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         Registro r=new Registro();
         r.setVisible(true);
+         dispose();
         
     }//GEN-LAST:event_botonRegistrarClienteActionPerformed
 
@@ -97,7 +103,15 @@ public class Inicio extends javax.swing.JFrame {
         // TODO add your handling code here:
         IniciaSesion ini= new IniciaSesion();
         ini.setVisible(true);
+         dispose();
     }//GEN-LAST:event_botonIniciarSesionActionPerformed
+
+    private void botonRetirarDineroSinTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetirarDineroSinTarjetaActionPerformed
+        // TODO add your handling code here:
+        RetiroSinTarjeta rt= new RetiroSinTarjeta();
+        rt.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_botonRetirarDineroSinTarjetaActionPerformed
 
     /**
      * @param args the command line arguments

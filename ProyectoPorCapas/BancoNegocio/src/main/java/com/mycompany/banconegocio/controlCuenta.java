@@ -15,7 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.mycompany.bancopersistencia.ConexionBD;
 import java.awt.Component;
+import java.sql.Statement;
 import java.util.Random;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -31,19 +33,7 @@ public class controlCuenta {
     }
     private static final Logger LOG = Logger.getLogger(controlCuenta.class.getName());
 
-    public void consultarClientesPortelefono(UsuarioDTO u) throws SQLException {
-        String sql = "ConsultarCuentasCliente(?)";
-
-        try ( PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-            // Asignamos los valores a los parámetros del procedimiento almacenado
-            pstmt.setString(1, u.getTelefono());
-            // Ejecutamos la llamada al procedimiento almacenado
-            pstmt.executeUpdate();
-            LOG.log(Level.INFO, "Cuentas consultados con exito");
-
-        }
-
-    }
+  
 
     private int obtenerNumeroCuenta(int idCliente) {
         String query = "SELECT Numero_Cuenta FROM Cuentas WHERE ID_Cliente = ?";
@@ -181,5 +171,66 @@ public class controlCuenta {
         }
         return informacion.toString();
     }
+     
+     public int obtenerClientePorTelefono(long telefono) {
+        String query = "SELECT id_cliente FROM usuarios WHERE telefono = ?";
+        try ( Connection conexion = obtenerConexion(); PreparedStatement pstmt = conexion.prepareStatement(query)) {//conectar y mandar la sentencia
+            pstmt.setLong(1, telefono);
+            try ( ResultSet rs = pstmt.executeQuery()) {//realiza la solicitud
+                if (rs.next()) {
+                    int idCliente = rs.getInt("id_cliente");
+                    return idCliente;
+                } else {
+                    System.out.println("El cliente no exise"); // Imprimir si el cliente existe
+                    return -1;
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace(); // Imprimir el stack trace de la excepción
+            return -1;
+        }
+    }
+     
+     public void agregarCuenta(int id){
+         //1. Crear la sentencia SQL que vamos a mandar a la BD
+        String sentenciaSQL = "INSERT INTO Cuentas (id_cliente) VALUES (?)";
 
-}
+        //insertar o intentar hacer la inserción en la tabla
+        try (  Connection conexion = ConexionBD.obtenerConexion();//  establecemos la conexion con la bd
+                //Crear el statement o el comando donde ejecutamos la sentencia
+                PreparedStatement ps = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS); // obtenemos de regreso la llave generada o el ID
+                ) {
+
+            //3. mandar los valores
+            ps.setInt(1,id);
+
+            //4. Ejecutamos el comando o lo enviamos a la BD
+            int registrosModificados = ps.executeUpdate();
+            LOG.log(Level.INFO, "Se agregaron con éxito {0} ", registrosModificados);
+           
+            // obtener el conjunto de resultados que tiene o contiene las llaves generadas durante el registro o inserción
+            ResultSet registroGenerado = ps.getGeneratedKeys();
+
+            //nos posicionamos en el primer registro o en el siguiente disponible. 
+            registroGenerado.next();
+            } catch (Exception e) {
+            LOG.log(Level.SEVERE, "No se agregó con éxito", e);
+        }
+     }
+       public void RellenarComboBox(JComboBox combo,String valor,int id){
+            String sql= "SELECT numero_cuenta FROM cuentas WHERE id_cliente=?";
+         try {Connection conexion = ConexionBD.obtenerConexion();//  establecemos la conexion con la bd
+                //Crear el statement o el comando donde ejecutamos la sentencia
+                PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                combo.addItem(rs.getString(valor));
+            }           
+        }catch(SQLException e){
+            JOptionPane.showMessageDialog(null,"No encontrados"+e.toString());
+        }
+       }
+
+     }
+
