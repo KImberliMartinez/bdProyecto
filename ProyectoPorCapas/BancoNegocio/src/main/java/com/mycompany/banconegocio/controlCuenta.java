@@ -104,9 +104,13 @@ public class controlCuenta {
             pstmt.setDouble(1, nuevoSaldo);
             pstmt.setInt(2, numeroCuenta);
             int filasActualizadas = pstmt.executeUpdate();
+          JOptionPane.showMessageDialog(null, "Dato actualizado correctamente.", "actualizacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+
             return filasActualizadas > 0;
+
         } catch (SQLException ex) {
             ex.printStackTrace();
+             JOptionPane.showMessageDialog(null, "No hay datos para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -231,6 +235,8 @@ public class controlCuenta {
             JOptionPane.showMessageDialog(null,"No encontrados"+e.toString());
         }
        }
+       
+        
 
      }
 

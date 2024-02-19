@@ -25,6 +25,8 @@ public class transferencias extends javax.swing.JFrame {
     private Connection conexion;
         private int id;
         controlCuenta c;
+        
+        
     public transferencias(TransaccionDAO transaccionDAO, int saldoDisponible) {
         this.transaccionDAO = transaccionDAO;
 
@@ -53,6 +55,14 @@ public class transferencias extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
         }
         
+    }
+    
+    public void actualizar(){
+         String datoSeleccionado = (String) ComboBox1.getSelectedItem();//selecionar la cuenta
+        int dato=Integer.parseInt(datoSeleccionado);
+       NumCuentaOrigen.setText(datoSeleccionado); //mandar el num de cuenta al txt de cuenta origien
+       String saldo=String.valueOf(c.obtenerSaldoDisponible(dato));
+       saldoDisponible.setText(saldo);//mandar el saldo disponible al label
     }
 
     /**
@@ -103,6 +113,7 @@ public class transferencias extends javax.swing.JFrame {
 
         jLabel5.setText("No.cuenta origen:");
 
+        NumCuentaOrigen.setEditable(false);
         NumCuentaOrigen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 NumCuentaOrigenActionPerformed(evt);
@@ -140,11 +151,11 @@ public class transferencias extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(cantidadATrasnferir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(cantidadATrasnferir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(ComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))))
                 .addContainerGap(63, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -153,7 +164,7 @@ public class transferencias extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(botonSalir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(saldoDisponible, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
+                .addComponent(saldoDisponible, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
@@ -163,10 +174,10 @@ public class transferencias extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
-                .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
+                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -200,14 +211,13 @@ public class transferencias extends javax.swing.JFrame {
     private void NumCuentaOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumCuentaOrigenActionPerformed
         // TODO add your handling code here:
               //  this.saldoDisponibleA = obtenerSaldoDisponible();
+             
 
     }//GEN-LAST:event_NumCuentaOrigenActionPerformed
 
     private void ComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBox1ActionPerformed
         // TODO add your handling code here:
-//        String datoSeleccionado = (String) ComboBox1.getSelectedItem();
-//         int cuenta=Integer.parseInt(datoSeleccionado);
-//        c.obtenerSaldoDisponible(cuenta);
+        //actualizar();
     }//GEN-LAST:event_ComboBox1ActionPerformed
 
     /**
