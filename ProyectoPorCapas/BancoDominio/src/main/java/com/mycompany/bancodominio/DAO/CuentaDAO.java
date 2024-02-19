@@ -8,12 +8,17 @@ package com.mycompany.bancodominio.DAO;
  *
  * @author ruben
  */
+import com.mycompany.bancodominio.Cuenta;
 import com.mycompany.bancodominio.dtos.UsuarioDTO;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
+import javax.swing.JOptionPane;
 
 public class CuentaDAO {
     private Connection conexion;
@@ -59,21 +64,30 @@ public class CuentaDAO {
     return false; // Retornar false si no se encuentra la cuenta
 }
     
-     public void consultarClientesPortelefono(String telefono) throws SQLException{
-        String sql = "ConsultarCuentasCliente(?)";
-        
-         try ( PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+     public int consultarClientesPortelefono(String telefono) throws SQLException{
+         int ids = 0;
+        String sql = " SELECT id_cliente FROM usuarios  WHERE telefono = ?";
+        try ( PreparedStatement pstmt = conexion.prepareStatement(sql)) {
             // Asignamos los valores a los parámetros del procedimiento almacenado
             pstmt.setString(1,telefono);
+          
             // Ejecutamos la llamada al procedimiento almacenado
-            pstmt.executeUpdate();
-           
+          //  pstmt.executeUpdate();
+              try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                int cliente = rs.getInt("id_cliente");
+                return cliente;
+                //System.out.println(cliente); 
+            }
+        }catch(SQLException e){
+                  System.out.println("no fue posible realizar esta accion");   
+        }
           
         }
-         
+    return ids;
     }
-
-    
+     
+            
 }
 
 
