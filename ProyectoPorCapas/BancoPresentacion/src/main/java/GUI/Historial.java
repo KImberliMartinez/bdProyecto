@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.bancopersistencia.ConexionBD;
 import static com.mycompany.bancopersistencia.ConexionBD.obtenerConexion;
 import java.sql.Connection;
@@ -21,12 +22,14 @@ import javax.swing.table.DefaultTableModel;
 public class Historial extends javax.swing.JFrame {
 
     private Connection conexion;
+    private SesionUsuario iniciarSesion;
 
     /**
      * Creates new form Historial
      */
     public Historial() {
         initComponents();
+        this.iniciarSesion = iniciarSesion;
         try {
             conexion = ConexionBD.obtenerConexion();
         } catch (SQLException e) {
@@ -90,13 +93,13 @@ public class Historial extends javax.swing.JFrame {
 
         tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Fecha", "Monto", "Numero de Cuenta Origen", "Tipo"
+                "Fecha", "Monto", "Tipo"
             }
         ));
         tabla2.setViewportView(tabla);
@@ -187,34 +190,35 @@ public class Historial extends javax.swing.JFrame {
     }//GEN-LAST:event_tipoOperacionActionPerformed
 
     private void botonCOnsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCOnsultarActionPerformed
-       String tipo = tipoOperacion.getSelectedItem().toString();
-    String desde = txtDesde.getText();
-    String hasta = txtHasta.getText();
+        String tipo = tipoOperacion.getSelectedItem().toString();
+        String desde = txtDesde.getText();
+        String hasta = txtHasta.getText();
+        SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+        int numeroCuenta = sesionUsuario.getNumeroCuenta();
+        // Realizar la consulta a la base de datos
+        try {
+             String query = "SELECT ID_Transaccion, Fecha, Monto, Numero_de_cuenta_destino, Tipo FROM Transacciones WHERE Numero_de_cuenta_destino = ? AND Tipo = ? AND Fecha BETWEEN ? AND ?";
+            PreparedStatement ps = conexion.prepareStatement(query);
+            ps.setInt(1, numeroCuenta); // Filtrar por el número de cuenta del usuario
+            ps.setString(2, tipo);
+            ps.setString(3, desde);
+            ps.setString(4, hasta);
+            ResultSet rs = ps.executeQuery();
 
-    // Realizar la consulta a la base de datos
-    try {
-        String query = "SELECT ID_Transaccion, Fecha, Monto, Numero_de_cuenta_destino, Tipo FROM Transacciones WHERE Tipo = ? AND Fecha BETWEEN ? AND ?";
-        PreparedStatement ps = conexion.prepareStatement(query);
-        ps.setString(1, tipo);
-        ps.setString(2, desde);
-        ps.setString(3, hasta);
-        ResultSet rs = ps.executeQuery();
-        
-        DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+            DefaultTableModel model = (DefaultTableModel) tabla.getModel();
 
-        model.setRowCount(0);
-        
-        while (rs.next()) {
-            Object[] fila = new Object[4]; 
-            fila[0] = rs.getDate("Fecha");
-            fila[1] = rs.getInt("Monto");
-            fila[2] = rs.getInt("Numero_de_cuenta_destino");
-            fila[3] = rs.getString("Tipo");
-            model.addRow(fila);
+            model.setRowCount(0);
+
+            while (rs.next()) {
+                Object[] fila = new Object[3];
+                fila[0] = rs.getDate("Fecha");
+                fila[1] = rs.getInt("Monto");
+                fila[2] = rs.getString("Tipo");
+                model.addRow(fila);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al consultar la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al consultar la base de datos: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    }
 
     }//GEN-LAST:event_botonCOnsultarActionPerformed
 
@@ -222,41 +226,6 @@ public class Historial extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtHastaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Historial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Historial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Historial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Historial.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Historial().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botonCOnsultar;

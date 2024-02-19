@@ -5,12 +5,17 @@
  */
 package GUI;
 
+import com.mycompany.bancodominio.DAO.CuentaDAO;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author delll
  */
 public class Retirar extends javax.swing.JFrame {
-
+private Connection conexion;
     /**
      * Creates new form Retirar
      */
@@ -27,21 +32,23 @@ public class Retirar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botonRetirarDinero = new javax.swing.JButton();
+        botonSalir = new javax.swing.JButton();
+        montoDineroARetirar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel1.setText("100");
-
         jLabel2.setText("Monto a retirar");
 
-        jButton1.setText("Retirar dinero");
+        botonRetirarDinero.setText("Retirar dinero");
+        botonRetirarDinero.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonRetirarDineroActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Salir");
+        botonSalir.setText("Salir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -52,33 +59,63 @@ public class Retirar extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(145, 145, 145)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(botonRetirarDinero)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(10, 10, 10)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)))
-                            .addComponent(jButton1)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(montoDineroARetirar)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(165, 165, 165)
-                        .addComponent(jButton2)))
+                        .addComponent(botonSalir)))
                 .addContainerGap(156, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(59, 59, 59)
+                .addComponent(montoDineroARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addGap(39, 39, 39)
-                .addComponent(jButton1)
+                .addComponent(botonRetirarDinero)
                 .addGap(27, 27, 27)
-                .addComponent(jButton2)
+                .addComponent(botonSalir)
                 .addContainerGap(68, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    
+     private int obtenerSaldoDisponible(int numeroCuenta) throws SQLException {
+        // Creamos una instancia de CuentaDAO utilizando la conexión a la base de datos
+        CuentaDAO cuentaDAO = new CuentaDAO(conexion);
+
+        // Llamamos al método obtenerSaldo de CuentaDAO para obtener el saldo de la cuenta
+        int saldoTotal = cuentaDAO.obtenerSaldo(numeroCuenta);
+
+        // Retornamos el saldo obtenido
+        return saldoTotal;
+    }
+    
+    private void botonRetirarDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetirarDineroActionPerformed
+         double montoARetirar = Double.parseDouble(montoDineroARetirar.getText());
+
+        // Obtener el saldo actual del cliente desde la base de datos
+        double saldoActual = obtenerSaldoDisponible();
+
+        if (saldoActual >= montoARetirar) {
+            // Permitir el retiro
+            double nuevoSaldo = saldoActual - montoARetirar;
+            // Actualizar el saldo en la base de datos
+            actualizarSaldoClienteEnBD(nuevoSaldo);
+            JOptionPane.showMessageDialog(this, "Retiro exitoso. Nuevo saldo: " + nuevoSaldo);
+        } else {
+            // Mostrar mensaje de error
+            JOptionPane.showMessageDialog(this, "Fondos insuficientes para realizar el retiro.");
+        }
+    }//GEN-LAST:event_botonRetirarDineroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -117,9 +154,9 @@ public class Retirar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton botonRetirarDinero;
+    private javax.swing.JButton botonSalir;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField montoDineroARetirar;
     // End of variables declaration//GEN-END:variables
 }

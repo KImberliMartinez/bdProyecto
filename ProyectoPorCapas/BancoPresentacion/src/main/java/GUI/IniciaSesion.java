@@ -6,7 +6,10 @@
 package GUI;
 
 import javax.swing.JOptionPane;
-
+import com.mycompany.banconegocio.*;
+import com.mycompany.bancopersistencia.ConexionBD;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 
 /**
@@ -15,12 +18,20 @@ import javax.swing.JOptionPane;
  */
 public class IniciaSesion extends javax.swing.JFrame {
    public String usuario;
+   private Connection conexion;
+   private SesionUsuario iniciarSesion;
     /**
      * Creates new form IniciaSesion
      */
     public IniciaSesion() {
         initComponents();
              usuario=txtTel.getText();
+              try {
+            conexion = ConexionBD.obtenerConexion();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
+        }
     }
 
     public String getUsuario() {
@@ -134,11 +145,15 @@ public class IniciaSesion extends javax.swing.JFrame {
 
     private void ContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContinuarActionPerformed
        // TODO add your handling code here:
+       controlCuenta controlCuenta = new controlCuenta(conexion);
         long telefono = Long.parseLong(txtTel.getText());
         String contrasena = new String(jPasswordField1.getPassword());
-        int numeroCuenta = consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
+       
+        int numeroCuenta = controlCuenta.consultarNumeroCuenta(telefono, contrasena);  // El metodo se encuentra en controlCuenta
         if (numeroCuenta != -1) {
             // El usuario existe en la base de datos y tiene una cuenta asociada
+            SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+            sesionUsuario.iniciarSesion(telefono, numeroCuenta);
             opcionesCliente op = new opcionesCliente();
             op.setTelefono(txtTel.getText());
             op.setVisible(true);

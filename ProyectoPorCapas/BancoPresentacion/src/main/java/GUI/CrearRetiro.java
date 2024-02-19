@@ -5,11 +5,23 @@
  */
 package GUI;
 
+import com.mycompany.bancopersistencia.ConexionBD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import javax.swing.JOptionPane;
+
+
 /**
  *
  * @author delll
  */
 public class CrearRetiro extends javax.swing.JFrame {
+
+    private Map<String, String> foliosYContrasenas = new HashMap<>();
 
     /**
      * Creates new form CrearRetiro
@@ -27,31 +39,29 @@ public class CrearRetiro extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtImporteARetirar = new javax.swing.JLabel();
+        importeARetirar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botonAceptar = new javax.swing.JButton();
+        botonSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Importe a retirar:");
-
-        jTextField1.setText("jTextField1");
+        txtImporteARetirar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtImporteARetirar.setText("Importe a retirar:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel2.setText("Retiro sin tarjeta crear folio");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jButton1.setText("Aceptar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botonAceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        botonAceptar.setText("Aceptar");
+        botonAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botonAceptarActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Salir");
+        botonSalir.setText("Salir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -61,17 +71,17 @@ public class CrearRetiro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botonSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(79, 79, 79)
-                        .addComponent(jLabel1)
+                        .addComponent(txtImporteARetirar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(importeARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(126, 126, 126)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(botonAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(113, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -80,22 +90,48 @@ public class CrearRetiro extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton2))
+                    .addComponent(botonSalir))
                 .addGap(83, 83, 83)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtImporteARetirar)
+                    .addComponent(importeARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(botonAceptar)
                 .addContainerGap(122, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botonAceptarActionPerformed
+
+    private void generarFolioYContrasena() {
+        Random random = new Random();
+        String folio = Integer.toString(random.nextInt(10000)); // Genera un folio aleatorio de 4 dígitos
+        String contrasena = Integer.toString(random.nextInt(10000)); // Genera una contraseña aleatoria de 4 dígitos
+
+        // Almacena el folio y la contraseña en el HashMap
+        foliosYContrasenas.put(folio, contrasena);
+        
+         try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            String consulta = "INSERT INTO retirossincuenta (Folio_de_operacion, Contraseña, ESTADOS, Fecha) VALUES (?, ?, ?, ?)";
+            PreparedStatement declaracion = conexion.prepareStatement(consulta);
+            declaracion.setInt(1, Integer.parseInt(folio));
+            declaracion.setString(2, contrasena);
+            declaracion.setString(3, "pendiente"); // Estado inicial
+            declaracion.setDate(4, new java.sql.Date(System.currentTimeMillis())); // Fecha actual
+            declaracion.executeUpdate();
+            conexion.close(); // Cerrar conexión
+            JOptionPane.showMessageDialog(this, "Retiro creado correctamente. Folio: " + folio + "Contraseña: " + contrasena);
+        } catch (SQLException e) {
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Error al crear el retiro");
+        }
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -134,10 +170,10 @@ public class CrearRetiro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton botonAceptar;
+    private javax.swing.JButton botonSalir;
+    private javax.swing.JTextField importeARetirar;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel txtImporteARetirar;
     // End of variables declaration//GEN-END:variables
 }
