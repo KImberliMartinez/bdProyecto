@@ -7,9 +7,12 @@ package GUI;
 
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
+import com.mycompany.bancopersistencia.ConexionBD;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,13 +29,22 @@ public class CrearRetiro extends javax.swing.JFrame {
     public CrearRetiro() {
         initComponents();
         centraVentana();
+        try {
+            conexion = ConexionBD.obtenerConexion();
+            ctl = new controlCuenta(conexion);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al conectar con la base de datos: " + ex.getMessage(), "Error de conexión", JOptionPane.ERROR_MESSAGE);
+        }
     }
     controlCuenta ctl = new controlCuenta(conexion);
+
     private void limpiar() {
         txtImporteARetirar.setText("");
-        
+
         txtImporteARetirar.requestFocus();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -119,36 +131,58 @@ public class CrearRetiro extends javax.swing.JFrame {
 
     private void botonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAceptarActionPerformed
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
-        ctl.generarFolioYContrasena(this, sesionUsuario.getNumeroCuenta());
-        limpiar();
+        int numeroCuenta = sesionUsuario.getNumeroCuenta();
+
+        // Obtener el saldo disponible en la cuenta del usuario
+        int saldoDisponible = ctl.obtenerSaldoDisponible(numeroCuenta);
+
+        String importeStr = importeARetirar.getText().trim();
+        if (importeStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe ingresar un valor para el importe", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int importe;
+        try {
+            importe = Integer.parseInt(importeStr);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El valor ingresado no es un número válido", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (importe > saldoDisponible) {
+            JOptionPane.showMessageDialog(this, "No hay suficiente saldo en la cuenta", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            ctl.generarFolioYContrasena(this, numeroCuenta);
+            limpiar();
+        }
     }//GEN-LAST:event_botonAceptarActionPerformed
 
     private void importeARetirarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_importeARetirarKeyTyped
         // TODO add your handling code here:
-                if(importeARetirar.getText().length() >= 10){
-        evt.consume();
-    }
-            int key = evt.getKeyChar();
+        if (importeARetirar.getText().length() >= 10) {
+            evt.consume();
+        }
+        int key = evt.getKeyChar();
 
-    boolean numeros = key >= 48 && key <= 57;
-        
-    if (!numeros)
-    {
-        evt.consume();
-    }
+        boolean numeros = key >= 48 && key <= 57;
 
-    if (importeARetirar.getText().trim().length() == 10) {
-        evt.consume();
-    }
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (importeARetirar.getText().trim().length() == 10) {
+            evt.consume();
+        }
     }//GEN-LAST:event_importeARetirarKeyTyped
 
     private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
         // TODO add your handling code here:
-        opcionesCliente op=new opcionesCliente();
+        opcionesCliente op = new opcionesCliente();
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_botonSalirActionPerformed
-  private void centraVentana() {
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
