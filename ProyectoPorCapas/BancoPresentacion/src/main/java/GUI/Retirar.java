@@ -13,18 +13,23 @@ import javax.swing.JOptionPane;
 import com.mycompany.banconegocio.SesionUsuario;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author delll
  */
 public class Retirar extends javax.swing.JFrame {
 private Connection conexion;
+private controlCuenta c;
+    private int id;
     /**
      * Creates new form Retirar
      */
     public Retirar() {
         initComponents();
         centraVentana();
+        c = new controlCuenta(conexion);
     }
 
     /**
@@ -41,6 +46,7 @@ private Connection conexion;
         botonSalir = new javax.swing.JButton();
         montoDineroARetirar = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        ComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,20 +86,22 @@ private Connection conexion;
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(115, 115, 115)
-                        .addComponent(montoDineroARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(152, 152, 152)
                         .addComponent(jLabel2))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(botonRetirarDinero))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(botonSalir)))
+                        .addComponent(botonSalir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(115, 115, 115)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(montoDineroARetirar, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(ComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(botonRetirarDinero)))
                 .addContainerGap(135, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -105,9 +113,11 @@ private Connection conexion;
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(montoDineroARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(botonRetirarDinero)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
                 .addComponent(botonSalir))
         );
 
@@ -129,21 +139,28 @@ private Connection conexion;
     private void botonRetirarDineroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRetirarDineroActionPerformed
          double montoARetirar = Double.parseDouble(montoDineroARetirar.getText());
          double saldoActual = 0;
-         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
-         int numeroCuenta = sesionUsuario.getNumeroCuenta();
+         String datoSeleccionado = (String) ComboBox1.getSelectedItem();
+        int dato = Integer.parseInt(datoSeleccionado);
+          SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+        id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
+        c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
         // Obtener el saldo actual del cliente desde la base de datos
         try{
-        saldoActual = obtenerSaldoDisponible(sesionUsuario.getNumeroCuenta());
+        saldoActual = obtenerSaldoDisponible(dato);
         }catch(SQLException ex){
             ex.printStackTrace();
         }
         if (saldoActual >= montoARetirar) {
-             controlCuenta control = new controlCuenta(conexion);
-            // Permitir el retiro
-            double nuevoSaldo = saldoActual - montoARetirar;
-            // Actualizar el saldo en la base de datos
-            control.actualizarSaldoCliente(numeroCuenta,nuevoSaldo);
-            JOptionPane.showMessageDialog(this, "Retiro exitoso. Nuevo saldo: " + nuevoSaldo);
+             try {
+                 // Permitir el retiro
+                 double nuevoSaldo = saldoActual - montoARetirar;
+                 // Actualizar el saldo en la base de datos
+                 c.actualizarSaldoCliente(dato,nuevoSaldo);
+                 c.GuardarDatosRetiro(dato,montoARetirar);
+                 JOptionPane.showMessageDialog(this, "Retiro exitoso. Nuevo saldo: " + nuevoSaldo);
+             } catch (SQLException ex) {
+                 Logger.getLogger(Retirar.class.getName()).log(Level.SEVERE, null, ex);
+             }
         } else {
             // Mostrar mensaje de error
             JOptionPane.showMessageDialog(this, "Fondos insuficientes para realizar el retiro.");
@@ -237,6 +254,7 @@ private void centraVentana() {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> ComboBox1;
     private javax.swing.JButton botonRetirarDinero;
     private javax.swing.JButton botonSalir;
     private javax.swing.JLabel jLabel1;

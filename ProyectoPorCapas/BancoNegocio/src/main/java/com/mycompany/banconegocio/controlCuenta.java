@@ -236,7 +236,18 @@ public class controlCuenta {
         }
        }
        
-        
-
+       //para guardar el la tabla transacciones
+            public void GuardarDatosRetiro(int numeroCuentaOrigen,double monto) throws SQLException {
+        String query = "INSERT INTO transacciones (Fecha, Monto, Numero_de_cuenta_destino,tipo) "
+                + "VALUES (CURDATE(), ?, ?,?)";
+        String tipo="retiros";
+        try ( PreparedStatement pstmt = conexion.prepareStatement(query)) {
+            pstmt.setDouble(1, monto);
+            pstmt.setInt(2, numeroCuentaOrigen);
+            pstmt.setString(3, tipo);
+            pstmt.executeUpdate();
+        }
+   
      }
+}
 

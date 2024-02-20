@@ -62,8 +62,6 @@ public class Historial extends javax.swing.JFrame {
         tabla = new javax.swing.JTable();
         Salir = new javax.swing.JButton();
         botonCOnsultar = new javax.swing.JButton();
-        txtDesde = new javax.swing.JTextField();
-        txtHasta = new javax.swing.JTextField();
         FechaDesde = new com.toedter.calendar.JDateChooser();
         FechaHasta = new com.toedter.calendar.JDateChooser();
 
@@ -124,12 +122,6 @@ public class Historial extends javax.swing.JFrame {
             }
         });
 
-        txtHasta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtHastaActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -156,10 +148,8 @@ public class Historial extends javax.swing.JFrame {
                                                 .addComponent(jLabel5))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(FechaHasta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(txtHasta, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                                                .addComponent(txtDesde, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                                                .addComponent(FechaDesde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                                .addComponent(FechaDesde, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
+                                                .addComponent(FechaHasta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(Salir)))
@@ -180,19 +170,15 @@ public class Historial extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(tipoOperacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel4)
-                            .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4)
-                        .addComponent(FechaDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(FechaDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(30, 30, 30)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(FechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(21, 21, 21)
+                            .addComponent(FechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(46, 46, 46)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Salir)
                             .addComponent(botonCOnsultar))))
@@ -220,7 +206,7 @@ public class Historial extends javax.swing.JFrame {
 
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
         int numeroCuenta = sesionUsuario.getNumeroCuenta();
-
+        System.out.println(numeroCuenta);
         // Realizar la consulta a la base de datos
         try {
             String query = "SELECT Fecha, Monto, Tipo FROM transacciones WHERE Numero_de_cuenta_destino = ? AND Tipo = ? AND Fecha BETWEEN ? AND ?";
@@ -247,10 +233,6 @@ public class Historial extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_botonCOnsultarActionPerformed
-
-    private void txtHastaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHastaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtHastaActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
@@ -328,7 +310,5 @@ public class Historial extends javax.swing.JFrame {
     private javax.swing.JTable tabla;
     private javax.swing.JScrollPane tabla2;
     private javax.swing.JComboBox<String> tipoOperacion;
-    private javax.swing.JTextField txtDesde;
-    private javax.swing.JTextField txtHasta;
     // End of variables declaration//GEN-END:variables
 }

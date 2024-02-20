@@ -219,7 +219,16 @@ private void limpiar() {
                 JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
 
             }
-            realizarTransferencia();
+               // Verificar si el texto cumple con el formato de un número entero en el rango deseado
+            if (cantidad!=100||cantidad!=200||cantidad!=400||cantidad!=500||cantidad!=600||cantidad!=700||cantidad!=800||cantidad!=900||cantidad!=1000) {
+                // No hay error, entrar
+                int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas depositar ?", "Confirmar deposito", JOptionPane.YES_NO_OPTION);
+                      realizarTransferencia();
+                   JOptionPane.showMessageDialog(this, "transferencia realizada Realizado");
+            }
+                JOptionPane.showMessageDialog(this, "Cantidad no permitida ingrese valores enteros 100,200 etc.");
+
+          
         }
 
     }//GEN-LAST:event_botonRealizarActionPerformed
