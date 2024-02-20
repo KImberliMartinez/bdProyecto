@@ -7,6 +7,7 @@ package GUI;
 
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
+import com.mycompany.bancopersistencia.ConexionBD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,25 +35,37 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
         id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
 
-        // Consultar y llenar la tabla con las cuentas del cliente
-        //  consultarCuentasPorCliente(id); // ID del cliente (reemplaza con el valor adecuado)
+        try {
+            conexion = ConexionBD.obtenerConexion(); // Reemplaza ConexionBD con tu clase de conexión
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
+        }
+        consultarCuentasPorCliente(id);
     }
 
     private void consultarCuentasPorCliente(int idCliente) {
         try (
-                 PreparedStatement statement = conexion.prepareStatement("SELECT * FROM Cuentas WHERE id_cliente = ?")) {
+                 PreparedStatement statement = conexion.prepareStatement("SELECT * FROM Cuentas WHERE id_cliente = ?");) {
             statement.setInt(1, idCliente);
             ResultSet resultSet = statement.executeQuery();
+
+            // Limpiar el modelo de la tabla antes de agregar nuevos datos
+            DefaultTableModel model = (DefaultTableModel) tCuentas.getModel();
+            model.setRowCount(0);
+
             // Llenar la tabla con los resultados de la consulta
             while (resultSet.next()) {
                 int numeroCuenta = resultSet.getInt("numero_cuenta");
                 String fecha = resultSet.getString("fecha_de_apertura");
                 int saldo = resultSet.getInt("saldo");
                 int idC = resultSet.getInt("id_cliente");
-                System.out.println("" + numeroCuenta + "" + fecha + "" + saldo + "" + idC);
-                //tableModel.addRow(new Object[]{numeroCuenta, fecha, saldo,idC});
+
+                // Agregar una nueva fila al modelo de la tabla
+                model.addRow(new Object[]{numeroCuenta, fecha, saldo, idC});
             }
 
+            // Actualizar la vista de la tabla
+            tCuentas.setModel(model);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
