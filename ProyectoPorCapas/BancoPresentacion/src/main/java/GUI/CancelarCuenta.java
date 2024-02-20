@@ -10,8 +10,10 @@ import com.mycompany.banconegocio.controlCuenta;
 import com.mycompany.bancopersistencia.ConexionBD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -33,6 +35,13 @@ public class CancelarCuenta extends javax.swing.JFrame {
     SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
      id=c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
      c.RellenarComboBox(box,"numero_cuenta", id);
+      try {
+            conexion = ConexionBD.obtenerConexion(); // Reemplaza ConexionBD con tu clase de conexión
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
+        }
+        consultarCuentasPorCliente(id);
+    
     }
 
     
@@ -64,7 +73,33 @@ public class CancelarCuenta extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No hay datos para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 }
+ private void consultarCuentasPorCliente(int idCliente) {
+        try (
+                 PreparedStatement statement = conexion.prepareStatement("SELECT * FROM Cuentas WHERE id_cliente = ?");) {
+            statement.setInt(1, idCliente);
+            ResultSet resultSet = statement.executeQuery();
 
+            // Limpiar el modelo de la tabla antes de agregar nuevos datos
+            DefaultTableModel model = (DefaultTableModel) tabla.getModel();
+            model.setRowCount(0);
+
+            // Llenar la tabla con los resultados de la consulta
+            while (resultSet.next()) {
+                int numeroCuenta = resultSet.getInt("numero_cuenta");
+                String fecha = resultSet.getString("fecha_de_apertura");
+                int saldo = resultSet.getInt("saldo");
+                int idC = resultSet.getInt("id_cliente");
+
+                // Agregar una nueva fila al modelo de la tabla
+                model.addRow(new Object[]{numeroCuenta, fecha, saldo, idC});
+            }
+
+            // Actualizar la vista de la tabla
+            tabla.setModel(model);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -75,14 +110,14 @@ public class CancelarCuenta extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabla = new javax.swing.JTable();
         box = new javax.swing.JComboBox<>();
         eliminar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -90,10 +125,18 @@ public class CancelarCuenta extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Num de cuenta", "Fecha Apertura", "Saldo", "Cliente"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tabla);
 
         eliminar.setText("Eliminar");
         eliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -201,6 +244,6 @@ public class CancelarCuenta extends javax.swing.JFrame {
     private javax.swing.JButton eliminar;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabla;
     // End of variables declaration//GEN-END:variables
 }

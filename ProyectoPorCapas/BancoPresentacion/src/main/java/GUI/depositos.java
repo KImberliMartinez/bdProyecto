@@ -13,6 +13,8 @@ import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -39,24 +41,50 @@ public class depositos extends javax.swing.JFrame {
     }
 
     //se realice el deposito mediante la clase control de la cuenta
-    private void DepositarSeleccionado() {
+    private void DepositarSeleccionado() throws SQLException {
         String datoSeleccionado = (String) ComboBox1.getSelectedItem();
         int dato = Integer.parseInt(datoSeleccionado);
-        double cantidad = Double.parseDouble(txCantidad.getText());
+        int cantidad = Integer.parseInt(txCantidad.getText());
+        System.out.println(dato);
+         try {
+            conexion = ConexionBD.obtenerConexion(); // Reemplaza ConexionBD con tu clase de conexión
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
+        }
         if (datoSeleccionado != null) {
             if (cantidad < 1 || cantidad > 10000) {
                 JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
 
             }
-            String input = txCantidad.getText();
             // Verificar si el texto cumple con el formato de un número entero en el rango deseado
-            if (Pattern.matches("1000|10000|[1-9][0-9]{2,3}", input)) {
+            if (cantidad!=100||cantidad!=200||cantidad!=400||cantidad!=500||cantidad!=600||cantidad!=700||cantidad!=800||cantidad!=900||cantidad!=1000) {
                 // No hay error, entrar
                 int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas depositar ?", "Confirmar deposito", JOptionPane.YES_NO_OPTION);
-                c.actualizarSaldoCliente(dato, cantidad);
+                    Depositar(dato, cantidad);
+                   JOptionPane.showMessageDialog(this, "Deposito Realizado");
             }
+                JOptionPane.showMessageDialog(this, "Cantidad no permitida ingrese valores enteros 100,200 etc.");
+
 
         }
+    }   
+    /**
+     *
+     * @param numeroCuentaOrigen
+     * @param numeroCuentaDestino
+     * @param monto
+     * @throws SQLException
+     */
+   public void Depositar(int numeroCuenta,int monto) throws SQLException {
+        
+        // Actualizar saldo de la cuenta destino
+        String queryActualizarDestino = "UPDATE Cuentas SET Saldo = Saldo + ? WHERE Numero_Cuenta = ?";
+        try ( PreparedStatement pstmt = conexion.prepareStatement(queryActualizarDestino)) {
+            pstmt.setInt(1, monto);
+            pstmt.setInt(2, numeroCuenta);
+            pstmt.executeUpdate();
+        }
+    
     }
 
     private void centraVentana() {
@@ -202,8 +230,16 @@ public class depositos extends javax.swing.JFrame {
     }//GEN-LAST:event_txCantidadActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
-        // TODO add your handling code here:
-        DepositarSeleccionado();
+        try {
+            // TODO add your handling code here:
+
+            DepositarSeleccionado();
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(depositos.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "No se pudo realizar");
+        }
+        
     }//GEN-LAST:event_aceptarActionPerformed
 
     private void txCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txCantidadKeyTyped

@@ -61,7 +61,7 @@ public class transferencias extends javax.swing.JFrame {
     public void actualizar() {
         String datoSeleccionado = (String) ComboBox1.getSelectedItem();//selecionar la cuenta
         int dato = Integer.parseInt(datoSeleccionado);
-        NumCuentaOrigen.setText(datoSeleccionado); //mandar el num de cuenta al txt de cuenta origien
+      
         String saldo = String.valueOf(c.obtenerSaldoDisponible(dato));
         saldoDisponible.setText(saldo);//mandar el saldo disponible al label
     }
@@ -84,7 +84,6 @@ public class transferencias extends javax.swing.JFrame {
         botonRealizar = new javax.swing.JButton();
         botonSalir = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        NumCuentaOrigen = new javax.swing.JTextField();
         ComboBox1 = new javax.swing.JComboBox<>();
         Cancelar = new javax.swing.JButton();
 
@@ -127,13 +126,6 @@ public class transferencias extends javax.swing.JFrame {
 
         jLabel5.setText("No.cuenta origen:");
 
-        NumCuentaOrigen.setEditable(false);
-        NumCuentaOrigen.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NumCuentaOrigenActionPerformed(evt);
-            }
-        });
-
         ComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ComboBox1ActionPerformed(evt);
@@ -171,9 +163,7 @@ public class transferencias extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cantidadATrasnferir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(ComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE))))
+                            .addComponent(ComboBox1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(127, 127, 127)
                         .addComponent(botonRealizar)
@@ -198,9 +188,7 @@ public class transferencias extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(8, 8, 8)
-                .addComponent(NumCuentaOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(cuentaQueSeTransferira, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -216,15 +204,15 @@ public class transferencias extends javax.swing.JFrame {
 private void limpiar() {
         cantidadATrasnferir.setText("");
         cuentaQueSeTransferira.setText("");
-        NumCuentaOrigen.setText("");
+        
         cantidadATrasnferir.requestFocus();
     }
     private void botonRealizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRealizarActionPerformed
         String palabra1 = cantidadATrasnferir.getText();
         int cantidad = Integer.parseInt(palabra1);
-        String palabra2 = NumCuentaOrigen.getText();
+       // String palabra2 = NumCuentaOrigen.getText();
         String palabra3 = cuentaQueSeTransferira.getText();
-        if (palabra1.isEmpty() || palabra2.isEmpty() || palabra3.isEmpty()) {
+        if (palabra1.isEmpty() ||  palabra3.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
         } else {
             if (cantidad < 1 || cantidad > 10000) {
@@ -243,13 +231,6 @@ private void limpiar() {
         this.setVisible(false);
         dispose();
     }//GEN-LAST:event_botonSalirActionPerformed
-
-    private void NumCuentaOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumCuentaOrigenActionPerformed
-        // TODO add your handling code here:
-        //  this.saldoDisponibleA = obtenerSaldoDisponible();
-
-
-    }//GEN-LAST:event_NumCuentaOrigenActionPerformed
 
     private void ComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBox1ActionPerformed
         // TODO add your handling code here:
@@ -347,8 +328,9 @@ private void limpiar() {
     }
 
     private void realizarTransferencia() {
+        String datoSeleccionado = (String) ComboBox1.getSelectedItem();
         int cantidadTransferir = Integer.parseInt(cantidadATrasnferir.getText());
-        int numCuentaOrigen = Integer.parseInt(NumCuentaOrigen.getText());
+        int numCuentaOrigen = Integer.parseInt(datoSeleccionado);
         int cuentaDestino = Integer.parseInt(cuentaQueSeTransferira.getText());
 
         CuentaDAO cuentaDAO = new CuentaDAO(conexion);
@@ -407,7 +389,6 @@ private void limpiar() {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Cancelar;
     private javax.swing.JComboBox<String> ComboBox1;
-    private javax.swing.JTextField NumCuentaOrigen;
     private javax.swing.JButton botonRealizar;
     private javax.swing.JButton botonSalir;
     private javax.swing.JTextField cantidadATrasnferir;
