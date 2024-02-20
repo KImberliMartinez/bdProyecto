@@ -16,10 +16,12 @@ import java.awt.event.KeyEvent;
 import static java.lang.Integer.parseInt;
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
@@ -55,7 +57,7 @@ public class Registro extends javax.swing.JFrame {
         tAP.setText("");
         tAM.setText("");
         tD.setText("");
-        tFN.setText("");
+                                                                                                                                                                                                                                                                                                                                                            
         tNombre.requestFocus();
     }
 
@@ -80,13 +82,12 @@ public class Registro extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         tD = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        tFN = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         tTel = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         tPass = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        FechaNacimiento = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -170,6 +171,8 @@ public class Registro extends javax.swing.JFrame {
             }
         });
 
+        FechaNacimiento.setDateFormatString("yyyy-MM-dd");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -192,9 +195,7 @@ public class Registro extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(tFN, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE))))
+                        .addComponent(FechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(56, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(2, 2, 2)
@@ -250,12 +251,10 @@ public class Registro extends javax.swing.JFrame {
                     .addComponent(tD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Cancelar))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
-                    .addComponent(tFN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
+                    .addComponent(FechaNacimiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
                 .addComponent(jLabel7)
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -296,13 +295,16 @@ public class Registro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
-if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|tD.getText().isEmpty()|tFN.getText().isEmpty()||
+if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|tD.getText().isEmpty()||
         tTel.getText().isEmpty()||tPass.getText().isEmpty()){
                 JOptionPane.showMessageDialog(this,"Complete todos los campos");
             }
             // TODO add your handling code here:
-            
-            ClienteNuevoDTO c=new ClienteNuevoDTO(tNombre.getText(), tAP.getText(), tAM.getText(), tD.getText(),tFN.getText(),tTel.getText(),tPass.getText());
+            String fecha=((JTextField)FechaNacimiento.getDateEditor().getUiComponent()).getText();
+           //tFN.setText(fecha);
+           
+//           //Date.valuesOf(fecha) para los tipo fecha
+            ClienteNuevoDTO c=new ClienteNuevoDTO(tNombre.getText(), tAP.getText(), tAM.getText(), tD.getText(),fecha,tTel.getText(),tPass.getText());
         try {
             clienteDAO.agregarClienteYusuario(c);
              Logger.getLogger(Registro.class.getName()).log(Level.INFO,"Clientee agregado ");
@@ -311,21 +313,7 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
             Logger.getLogger(Registro.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-//            if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|tD.getText().isEmpty()|tFN.getText().isEmpty()){
-//                JOptionPane.showMessageDialog(this,"Complete todos los campos");
-//            }
-//            // TODO add your handling code here:
-
-//            ClienteNuevoDTO c=new ClienteNuevoDTO(tNombre.getText(), tAP.getText(), tAM.getText(), tD.getText(),tFN.getText());
-//        try {
-//            
-//            clienteDAO.agregarCliente(c);
-//             Logger.getLogger(Registro.class.getName()).log(Level.INFO,"Clientee agregado ");
-//             limpiar();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Registro.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-           
+//                      
     }//GEN-LAST:event_AgregarActionPerformed
 
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
@@ -460,7 +448,7 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agregar;
     private javax.swing.JButton Cancelar;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser FechaNacimiento;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -474,7 +462,6 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
     private javax.swing.JTextField tAM;
     private javax.swing.JTextField tAP;
     private javax.swing.JTextField tD;
-    private javax.swing.JTextField tFN;
     private javax.swing.JTextField tNombre;
     private javax.swing.JTextField tPass;
     private javax.swing.JTextField tTel;

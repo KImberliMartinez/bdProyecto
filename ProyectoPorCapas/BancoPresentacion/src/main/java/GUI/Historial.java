@@ -15,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -63,8 +64,8 @@ public class Historial extends javax.swing.JFrame {
         botonCOnsultar = new javax.swing.JButton();
         txtDesde = new javax.swing.JTextField();
         txtHasta = new javax.swing.JTextField();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        FechaDesde = new com.toedter.calendar.JDateChooser();
+        FechaHasta = new com.toedter.calendar.JDateChooser();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -155,10 +156,10 @@ public class Historial extends javax.swing.JFrame {
                                                 .addComponent(jLabel5))
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(FechaHasta, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(txtHasta, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                                                 .addComponent(txtDesde, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
-                                                .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                                .addComponent(FechaDesde, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(Salir)))
@@ -184,13 +185,13 @@ public class Historial extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(4, 4, 4)
-                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(FechaDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(FechaHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(21, 21, 21)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Salir)
@@ -207,8 +208,11 @@ public class Historial extends javax.swing.JFrame {
 
     private void botonCOnsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCOnsultarActionPerformed
         String tipo = tipoOperacion.getSelectedItem().toString();
+        String fechaDesde=((JTextField)FechaDesde.getDateEditor().getUiComponent()).getText();
         String desde = txtDesde.getText();
         String hasta = txtHasta.getText();
+        String fechaHasta=((JTextField)FechaHasta.getDateEditor().getUiComponent()).getText();
+        
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
         int numeroCuenta = sesionUsuario.getNumeroCuenta();
         // Realizar la consulta a la base de datos
@@ -217,8 +221,8 @@ public class Historial extends javax.swing.JFrame {
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setInt(1, numeroCuenta); // Filtrar por el número de cuenta del usuario
             ps.setString(2, tipo);
-            ps.setString(3, desde);
-            ps.setString(4, hasta);
+            ps.setString(3, fechaDesde);
+            ps.setString(4, fechaHasta);
             ResultSet rs = ps.executeQuery();
 
             DefaultTableModel model = (DefaultTableModel) tabla.getModel();
@@ -304,10 +308,10 @@ private void centraVentana() {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private com.toedter.calendar.JDateChooser FechaDesde;
+    private com.toedter.calendar.JDateChooser FechaHasta;
     private javax.swing.JButton Salir;
     private javax.swing.JButton botonCOnsultar;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
