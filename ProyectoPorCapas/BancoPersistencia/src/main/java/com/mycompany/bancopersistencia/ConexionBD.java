@@ -17,7 +17,7 @@ public class ConexionBD {
     // Datos de conexión a la base de datos
     private static final String URL = "jdbc:mysql://localhost:3306/Banco";
     private static final String USUARIO = "root";
-    private static final String CONTRASEÑA = "root";
+    private static final String CONTRASEÑA = "12131442";
 
     // Método para obtener una conexión a la base de datos
     public static Connection obtenerConexion() throws SQLException {

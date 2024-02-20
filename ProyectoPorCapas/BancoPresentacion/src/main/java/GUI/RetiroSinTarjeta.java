@@ -8,6 +8,7 @@ package GUI;
 import com.mycompany.banconegocio.controlCuenta;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 /**
@@ -15,7 +16,7 @@ import javax.swing.JOptionPane;
  * @author delll
  */
 public class RetiroSinTarjeta extends javax.swing.JFrame {
-
+private Connection conexion;
     /**
      * Creates new form RetiroSinTarjeta
      */
@@ -131,7 +132,10 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
     private void botonContinuarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonContinuarActionPerformed
         String folio = numFolio.getText();
          if (controlCuenta.validarFolio(folio)) {
+             controlCuenta ct = new controlCuenta(conexion);
+             ct.actualizarEstadoRetiro(folio, "concluido");
              JOptionPane.showMessageDialog(this, controlCuenta.obtenerInformacionFolio(folio), "Información del Folio", JOptionPane.INFORMATION_MESSAGE);
+             ct.cancelarTemporizador();
             IniciaSesionRetiro in=new IniciaSesionRetiro();
              in.setVisible(true);
              dispose();

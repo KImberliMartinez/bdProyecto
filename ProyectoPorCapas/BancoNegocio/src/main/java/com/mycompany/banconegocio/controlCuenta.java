@@ -4,8 +4,8 @@
  * and open the template in the editor.
  */
 package com.mycompany.banconegocio;
-
-import com.mycompany.bancodominio.dtos.UsuarioDTO;
+import java.util.Timer;
+import java.util.TimerTask;
 import static com.mycompany.bancopersistencia.ConexionBD.obtenerConexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,8 +32,29 @@ public class controlCuenta {
         this.conexion = conexion;
     }
     private static final Logger LOG = Logger.getLogger(controlCuenta.class.getName());
+    private Timer temporizador;
+    private String folioActivo; // Almacena el folio del retiro activo
 
-  
+    public void actualizarEstadoRetiro(String folio, String nuevoEstado) {
+        String sql = "UPDATE retirossincuenta SET ESTADOS = ? WHERE Folio_de_operacion = ?";
+
+        try ( Connection conexion = ConexionBD.obtenerConexion();  PreparedStatement statement = conexion.prepareStatement(sql)) {
+
+            statement.setString(1, nuevoEstado);
+            statement.setString(2, folio);
+
+            int filasActualizadas = statement.executeUpdate();
+
+            if (filasActualizadas > 0) {
+                System.out.println("El estado del retiro con folio " + folio + " se actualizó correctamente a " + nuevoEstado);
+            } else {
+                System.out.println("No se pudo actualizar el estado del retiro con folio " + folio);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al actualizar el estado del retiro: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
 
     private int obtenerNumeroCuenta(int idCliente) {
         String query = "SELECT Numero_Cuenta FROM Cuentas WHERE ID_Cliente = ?";
@@ -56,8 +77,34 @@ public class controlCuenta {
         }
     }
 
-    
-     public int consultarNumeroCuenta(long telefono, String contrasena) {
+    // Método para iniciar el temporizador
+    public void iniciarTemporizador(String folio) {
+        temporizador = new Timer();
+        temporizador.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // Lógica para cancelar el retiro después de 10 minutos
+                cancelarRetiroPorTiempo(folio);
+            }
+        }, 10 * 60 * 1000); // 10 minutos en milisegundos
+        folioActivo = folio; // Establecer el folio como activo
+    }
+
+    // Método para cancelar el temporizador de un retiro
+    public void cancelarTemporizador() {
+        if (temporizador != null) {
+            temporizador.cancel(); // Cancelar el temporizador si existe
+        }
+    }
+
+    // Método para cancelar el retiro si han pasado 10 minutos
+    private void cancelarRetiroPorTiempo(String folio) {
+        cancelarTemporizador();
+        // Lógica para cancelar el retiro
+        actualizarEstadoRetiro(folio, "cancelado");
+    }
+
+    public int consultarNumeroCuenta(long telefono, String contrasena) {
         String query = "SELECT id_cliente FROM usuarios WHERE telefono = ? AND contrasena = ?";
         try ( Connection conexion = obtenerConexion();  PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setLong(1, telefono);
@@ -104,13 +151,13 @@ public class controlCuenta {
             pstmt.setDouble(1, nuevoSaldo);
             pstmt.setInt(2, numeroCuenta);
             int filasActualizadas = pstmt.executeUpdate();
-          JOptionPane.showMessageDialog(null, "Dato actualizado correctamente.", "actualizacion exitosa", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Dato actualizado correctamente.", "actualizacion exitosa", JOptionPane.INFORMATION_MESSAGE);
 
             return filasActualizadas > 0;
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-             JOptionPane.showMessageDialog(null, "No hay datos para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "No hay datos para actualizar.", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -128,6 +175,7 @@ public class controlCuenta {
             declaracion.setInt(2, Integer.parseInt(folio));
             declaracion.setString(3, contrasena);
             declaracion.setString(4, "pendiente"); // Estado inicial
+            iniciarTemporizador(folio);
             declaracion.setDate(5, new java.sql.Date(System.currentTimeMillis())); // Fecha actual
             declaracion.executeUpdate();
             conexion.close(); // Cerrar conexión
@@ -136,6 +184,7 @@ public class controlCuenta {
             System.out.println("Error al conectar con la base de datos: " + e.getMessage());
         }
     }
+
     public static boolean validarFolio(String folio) {
         boolean existe = false;
         try {
@@ -153,8 +202,8 @@ public class controlCuenta {
         }
         return existe;
     }
-    
-     public static String obtenerInformacionFolio(String folio) {
+
+    public static String obtenerInformacionFolio(String folio) {
         StringBuilder informacion = new StringBuilder();
         try {
             Connection conexion = ConexionBD.obtenerConexion();
@@ -164,8 +213,8 @@ public class controlCuenta {
             ResultSet resultado = declaracion.executeQuery();
             if (resultado.next()) {
                 informacion.append("Información del folio ").append(folio).append(":\n");
-                informacion.append("Estado: ").append(resultado.getString("ESTADOS")).append("\n"); 
-                informacion.append("Fecha: ").append(resultado.getDate("Fecha")).append("\n"); 
+                informacion.append("Estado: ").append(resultado.getString("ESTADOS")).append("\n");
+                informacion.append("Fecha: ").append(resultado.getDate("Fecha")).append("\n");
             } else {
                 informacion.append("No se encontró información para el folio ").append(folio);
             }
@@ -175,10 +224,10 @@ public class controlCuenta {
         }
         return informacion.toString();
     }
-     
-     public int obtenerClientePorTelefono(long telefono) {
+
+    public int obtenerClientePorTelefono(long telefono) {
         String query = "SELECT id_cliente FROM usuarios WHERE telefono = ?";
-        try ( Connection conexion = obtenerConexion(); PreparedStatement pstmt = conexion.prepareStatement(query)) {//conectar y mandar la sentencia
+        try ( Connection conexion = obtenerConexion();  PreparedStatement pstmt = conexion.prepareStatement(query)) {//conectar y mandar la sentencia
             pstmt.setLong(1, telefono);
             try ( ResultSet rs = pstmt.executeQuery()) {//realiza la solicitud
                 if (rs.next()) {
@@ -194,60 +243,61 @@ public class controlCuenta {
             return -1;
         }
     }
-     
-     public void agregarCuenta(int id){
-         //1. Crear la sentencia SQL que vamos a mandar a la BD
+
+    public void agregarCuenta(int id) {
+        //1. Crear la sentencia SQL que vamos a mandar a la BD
         String sentenciaSQL = "INSERT INTO Cuentas (id_cliente) VALUES (?)";
 
         //insertar o intentar hacer la inserción en la tabla
-        try (  Connection conexion = ConexionBD.obtenerConexion();//  establecemos la conexion con la bd
+        try ( Connection conexion = ConexionBD.obtenerConexion();//  establecemos la conexion con la bd
                 //Crear el statement o el comando donde ejecutamos la sentencia
-                PreparedStatement ps = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS); // obtenemos de regreso la llave generada o el ID
+                  PreparedStatement ps = conexion.prepareStatement(sentenciaSQL, Statement.RETURN_GENERATED_KEYS); // obtenemos de regreso la llave generada o el ID
                 ) {
 
             //3. mandar los valores
-            ps.setInt(1,id);
+            ps.setInt(1, id);
 
             //4. Ejecutamos el comando o lo enviamos a la BD
             int registrosModificados = ps.executeUpdate();
             LOG.log(Level.INFO, "Se agregaron con éxito {0} ", registrosModificados);
-           
+
             // obtener el conjunto de resultados que tiene o contiene las llaves generadas durante el registro o inserción
             ResultSet registroGenerado = ps.getGeneratedKeys();
 
             //nos posicionamos en el primer registro o en el siguiente disponible. 
             registroGenerado.next();
-            } catch (Exception e) {
+        } catch (Exception e) {
             LOG.log(Level.SEVERE, "No se agregó con éxito", e);
         }
-     }
-       public void RellenarComboBox(JComboBox combo,String valor,int id){
-            String sql= "SELECT numero_cuenta FROM cuentas WHERE id_cliente=?";
-         try {Connection conexion = ConexionBD.obtenerConexion();//  establecemos la conexion con la bd
-                //Crear el statement o el comando donde ejecutamos la sentencia
-                PreparedStatement ps = conexion.prepareStatement(sql);
+    }
+
+    public void RellenarComboBox(JComboBox combo, String valor, int id) {
+        String sql = "SELECT numero_cuenta FROM cuentas WHERE id_cliente=?";
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();//  establecemos la conexion con la bd
+            //Crear el statement o el comando donde ejecutamos la sentencia
+            PreparedStatement ps = conexion.prepareStatement(sql);
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 combo.addItem(rs.getString(valor));
-            }           
-        }catch(SQLException e){
-            JOptionPane.showMessageDialog(null,"No encontrados"+e.toString());
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "No encontrados" + e.toString());
         }
-       }
-       
-       //para guardar el la tabla transacciones
-            public void GuardarDatosRetiro(int numeroCuentaOrigen,double monto) throws SQLException {
+    }
+
+    //para guardar el la tabla transacciones
+    public void GuardarDatosRetiro(int numeroCuentaOrigen, double monto) throws SQLException {
         String query = "INSERT INTO transacciones (Fecha, Monto, Numero_de_cuenta_destino,tipo) "
                 + "VALUES (CURDATE(), ?, ?,?)";
-        String tipo="retiros";
+        String tipo = "retiros";
         try ( PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setDouble(1, monto);
             pstmt.setInt(2, numeroCuentaOrigen);
             pstmt.setString(3, tipo);
             pstmt.executeUpdate();
         }
-   
-     }
-}
 
+    }
+}
