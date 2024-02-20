@@ -7,13 +7,13 @@ package GUI;
 
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.bancopersistencia.ConexionBD;
-import static com.mycompany.bancopersistencia.ConexionBD.obtenerConexion;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -208,16 +208,22 @@ public class Historial extends javax.swing.JFrame {
 
     private void botonCOnsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCOnsultarActionPerformed
         String tipo = tipoOperacion.getSelectedItem().toString();
-        String fechaDesde=((JTextField)FechaDesde.getDateEditor().getUiComponent()).getText();
-        String desde = txtDesde.getText();
-        String hasta = txtHasta.getText();
-        String fechaHasta=((JTextField)FechaHasta.getDateEditor().getUiComponent()).getText();
-        
+        String fechaDesde = "";
+        String fechaHasta = "";
+
+        if (FechaDesde.getDate() != null) {
+            fechaDesde = new SimpleDateFormat("yyyy-MM-dd").format(FechaDesde.getDate());
+        }
+        if (FechaHasta.getDate() != null) {
+            fechaHasta = new SimpleDateFormat("yyyy-MM-dd").format(FechaHasta.getDate());
+        }
+
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
         int numeroCuenta = sesionUsuario.getNumeroCuenta();
+
         // Realizar la consulta a la base de datos
         try {
-             String query = "SELECT ID_Transaccion, Fecha, Monto, Numero_de_cuenta_destino, Tipo FROM Transacciones WHERE Numero_de_cuenta_destino = ? AND Tipo = ? AND Fecha BETWEEN ? AND ?";
+            String query = "SELECT Fecha, Monto, Tipo FROM Transacciones WHERE Numero_de_cuenta_destino = ? AND Tipo = ? AND Fecha BETWEEN ? AND ?";
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setInt(1, numeroCuenta); // Filtrar por el número de cuenta del usuario
             ps.setString(2, tipo);
@@ -248,11 +254,11 @@ public class Historial extends javax.swing.JFrame {
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
-        opcionesCliente op=new opcionesCliente();
+        opcionesCliente op = new opcionesCliente();
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed
-private void centraVentana() {
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -272,7 +278,8 @@ private void centraVentana() {
         setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
     }
-  /**
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {

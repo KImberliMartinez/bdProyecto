@@ -21,41 +21,45 @@ import javax.swing.JOptionPane;
  * @author delll
  */
 public class depositos extends javax.swing.JFrame {
-private controlCuenta c;
-     private Connection conexion;
-     private int id;
+
+    private controlCuenta c;
+    private Connection conexion;
+    private int id;
+
     /**
      * Creates new form depositos
      */
     public depositos() {
         initComponents();
         centraVentana();
-         c = new controlCuenta(conexion);
-    SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
-     id=c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
-     c.RellenarComboBox(ComboBox1,"numero_cuenta", id);
+        c = new controlCuenta(conexion);
+        SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+        id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
+        c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
     }
+
     //se realice el deposito mediante la clase control de la cuenta
     private void DepositarSeleccionado() {
         String datoSeleccionado = (String) ComboBox1.getSelectedItem();
-        int dato=Integer.parseInt(datoSeleccionado);
-        double cantidad= Double.parseDouble(txCantidad.getText());
+        int dato = Integer.parseInt(datoSeleccionado);
+        double cantidad = Double.parseDouble(txCantidad.getText());
         if (datoSeleccionado != null) {
-            if(cantidad<1||cantidad>10000){
-            JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
+            if (cantidad < 1 || cantidad > 10000) {
+                JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
 
             }
             String input = txCantidad.getText();
-                // Verificar si el texto cumple con el formato de un número entero en el rango deseado
-                if (Pattern.matches("1000|10000|[1-9][0-9]{2,3}", input)) {
-                    // No hay error, entrar
-                     int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas depositar ?", "Confirmar deposito", JOptionPane.YES_NO_OPTION);
-            c.actualizarSaldoCliente(dato,cantidad);
-                }
-           
+            // Verificar si el texto cumple con el formato de un número entero en el rango deseado
+            if (Pattern.matches("1000|10000|[1-9][0-9]{2,3}", input)) {
+                // No hay error, entrar
+                int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas depositar ?", "Confirmar deposito", JOptionPane.YES_NO_OPTION);
+                c.actualizarSaldoCliente(dato, cantidad);
+            }
+
         }
-}
-   private void centraVentana() {
+    }
+
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -75,9 +79,10 @@ private controlCuenta c;
         setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
     }
-   private void limpiar() {
+
+    private void limpiar() {
         txCantidad.setText("");
-        
+
         txCantidad.requestFocus();
     }
 
@@ -186,45 +191,44 @@ private controlCuenta c;
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
-           opcionesCliente op=new opcionesCliente();
+        opcionesCliente op = new opcionesCliente();
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
     private void txCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txCantidadActionPerformed
         // TODO add your handling code here:
-       
+
     }//GEN-LAST:event_txCantidadActionPerformed
 
     private void aceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aceptarActionPerformed
         // TODO add your handling code here:
-         DepositarSeleccionado();
+        DepositarSeleccionado();
     }//GEN-LAST:event_aceptarActionPerformed
 
     private void txCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txCantidadKeyTyped
         // TODO add your handling code here:
-            if(txCantidad.getText().length() >=10){
-        evt.consume();
-    }
-            int key = evt.getKeyChar();
+        if (txCantidad.getText().length() >= 10) {
+            evt.consume();
+        }
+        int key = evt.getKeyChar();
 
-    boolean numeros = key >= 48 && key <= 57;
-        
-    if (!numeros)
-    {
-        evt.consume();
-    }
+        boolean numeros = key >= 48 && key <= 57;
 
-    if (txCantidad.getText().trim().length() == 10) {
-        evt.consume();
-    }
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txCantidad.getText().trim().length() == 10) {
+            evt.consume();
+        }
 
     }//GEN-LAST:event_txCantidadKeyTyped
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         // TODO add your handling code here:
-     
-        
+
+
     }//GEN-LAST:event_cancelarActionPerformed
 
     /**

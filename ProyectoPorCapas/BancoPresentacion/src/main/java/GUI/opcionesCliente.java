@@ -174,7 +174,7 @@ public class opcionesCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Inicio in= new Inicio();
+        Inicio in = new Inicio();
         in.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -208,11 +208,11 @@ public class opcionesCliente extends javax.swing.JFrame {
 
     private void DepositarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DepositarActionPerformed
         // TODO add your handling code here:
-        depositos d=new depositos();
+        depositos d = new depositos();
         d.setVisible(true);
         dispose();
     }//GEN-LAST:event_DepositarActionPerformed
-private void centraVentana() {
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -232,6 +232,7 @@ private void centraVentana() {
         setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
     }
+
     /**
      * @param args the command line arguments
      */

@@ -25,15 +25,14 @@ public class transferencias extends javax.swing.JFrame {
     private TransaccionDAO transaccionDAO;
     private int saldoDisponibleA;
     private Connection conexion;
-        private int id;
-        controlCuenta c;
-        
-        
+    private int id;
+    controlCuenta c;
+
     public transferencias(TransaccionDAO transaccionDAO, int saldoDisponible) {
         this.transaccionDAO = transaccionDAO;
 
         initComponents();
-        
+
     }
 
     // int numCuentaOrigen = Integer.parseInt(NumCuentaOrigen.getText());
@@ -44,28 +43,27 @@ public class transferencias extends javax.swing.JFrame {
         centraVentana();
         c = new controlCuenta(conexion);
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
-     id=c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
-     c.RellenarComboBox(ComboBox1,"numero_cuenta", id);
+        id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
+        c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
         try {
-            
+
             conexion = ConexionBD.obtenerConexion();
             transaccionDAO = new TransaccionDAO(conexion);
-                        saldoDisponible.setText(Integer.toString(saldoDisponibleA));
+            saldoDisponible.setText(Integer.toString(saldoDisponibleA));
 
-            
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
         }
-        
+
     }
-    
-    public void actualizar(){
-         String datoSeleccionado = (String) ComboBox1.getSelectedItem();//selecionar la cuenta
-        int dato=Integer.parseInt(datoSeleccionado);
-       NumCuentaOrigen.setText(datoSeleccionado); //mandar el num de cuenta al txt de cuenta origien
-       String saldo=String.valueOf(c.obtenerSaldoDisponible(dato));
-       saldoDisponible.setText(saldo);//mandar el saldo disponible al label
+
+    public void actualizar() {
+        String datoSeleccionado = (String) ComboBox1.getSelectedItem();//selecionar la cuenta
+        int dato = Integer.parseInt(datoSeleccionado);
+        NumCuentaOrigen.setText(datoSeleccionado); //mandar el num de cuenta al txt de cuenta origien
+        String saldo = String.valueOf(c.obtenerSaldoDisponible(dato));
+        saldoDisponible.setText(saldo);//mandar el saldo disponible al label
     }
 
     /**
@@ -223,14 +221,14 @@ private void limpiar() {
     }
     private void botonRealizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonRealizarActionPerformed
         String palabra1 = cantidadATrasnferir.getText();
-        int cantidad=Integer.parseInt(palabra1);
+        int cantidad = Integer.parseInt(palabra1);
         String palabra2 = NumCuentaOrigen.getText();
         String palabra3 = cuentaQueSeTransferira.getText();
         if (palabra1.isEmpty() || palabra2.isEmpty() || palabra3.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Por favor, complete todos los campos");
         } else {
-              if(cantidad<1||cantidad>10000){
-            JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
+            if (cantidad < 1 || cantidad > 10000) {
+                JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
 
             }
             realizarTransferencia();
@@ -248,8 +246,8 @@ private void limpiar() {
 
     private void NumCuentaOrigenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NumCuentaOrigenActionPerformed
         // TODO add your handling code here:
-              //  this.saldoDisponibleA = obtenerSaldoDisponible();
-             
+        //  this.saldoDisponibleA = obtenerSaldoDisponible();
+
 
     }//GEN-LAST:event_NumCuentaOrigenActionPerformed
 
@@ -265,35 +263,33 @@ private void limpiar() {
 
     private void cantidadATrasnferirKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cantidadATrasnferirKeyTyped
         // TODO add your handling code here:
-          if(cantidadATrasnferir.getText().length() >=10){
-        evt.consume();
-    }
-            int key = evt.getKeyChar();
+        if (cantidadATrasnferir.getText().length() >= 10) {
+            evt.consume();
+        }
+        int key = evt.getKeyChar();
 
-    boolean numeros = key >= 48 && key <= 57;
-        
-    if (!numeros)
-    {
-        evt.consume();
-    }
+        boolean numeros = key >= 48 && key <= 57;
 
-    if (cantidadATrasnferir.getText().trim().length() == 10) {
-        evt.consume();
-    }
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (cantidadATrasnferir.getText().trim().length() == 10) {
+            evt.consume();
+        }
     }//GEN-LAST:event_cantidadATrasnferirKeyTyped
 
     private void cuentaQueSeTransferiraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cuentaQueSeTransferiraKeyTyped
         // TODO add your handling code here:
-                    int key = evt.getKeyChar();
+        int key = evt.getKeyChar();
 
-    boolean numeros = key >= 48 && key <= 57;
-        
-    if (!numeros)
-    {
-        evt.consume();
-    }
+        boolean numeros = key >= 48 && key <= 57;
+
+        if (!numeros) {
+            evt.consume();
+        }
     }//GEN-LAST:event_cuentaQueSeTransferiraKeyTyped
-private void centraVentana() {
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -313,6 +309,7 @@ private void centraVentana() {
         setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
     }
+
     /**
      * @param args the command line arguments
      */
@@ -339,11 +336,11 @@ private void centraVentana() {
             java.util.logging.Logger.getLogger(transferencias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-          
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
                 new transferencias().setVisible(true);
             }
         });

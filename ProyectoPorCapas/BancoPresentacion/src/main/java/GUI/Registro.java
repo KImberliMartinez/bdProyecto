@@ -9,15 +9,12 @@ import com.mycompany.bancodominio.DAO.ClienteDAO;
 import com.mycompany.bancodominio.dtos.ClienteNuevoDTO;
 import com.mycompany.banconegocio.controlCliente;
 import com.mycompany.bancopersistencia.ConexionBD;
-import com.mycompany.bancopersistencia.PersistenciaException;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import static java.lang.Integer.parseInt;
-import java.math.BigInteger;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -40,24 +37,25 @@ public class Registro extends javax.swing.JFrame {
         this.clienteDAO = clienteDAO;
         initComponents();
     }
+
     public Registro() {
         initComponents();
         centraVentana();
-        try{
-            conexion=ConexionBD.obtenerConexion();
-            clienteDAO=new ClienteDAO(conexion);
-        }catch(SQLException e){
-             e.printStackTrace();
+        try {
+            conexion = ConexionBD.obtenerConexion();
+            clienteDAO = new ClienteDAO(conexion);
+        } catch (SQLException e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
         }
     }
-    
-     private void limpiar() {
+
+    private void limpiar() {
         tNombre.setText("");
         tAP.setText("");
         tAM.setText("");
         tD.setText("");
-                                                                                                                                                                                                                                                                                                                                                            
+
         tNombre.requestFocus();
     }
 
@@ -295,24 +293,27 @@ public class Registro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarActionPerformed
-if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|tD.getText().isEmpty()||
-        tTel.getText().isEmpty()||tPass.getText().isEmpty()){
-                JOptionPane.showMessageDialog(this,"Complete todos los campos");
+        if (tNombre.getText().isEmpty() || tAP.getText().isEmpty() || tAM.getText().isEmpty() || tD.getText().isEmpty()
+                || tTel.getText().isEmpty() || tPass.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Complete todos los campos");
+        } else {
+            String fecha = "";
+            if (FechaNacimiento.getDate() != null) {
+                fecha = new SimpleDateFormat("yyyy-MM-dd").format(FechaNacimiento.getDate());
             }
-            // TODO add your handling code here:
-            String fecha=((JTextField)FechaNacimiento.getDateEditor().getUiComponent()).getText();
-           //tFN.setText(fecha);
-           
-//           //Date.valuesOf(fecha) para los tipo fecha
-            ClienteNuevoDTO c=new ClienteNuevoDTO(tNombre.getText(), tAP.getText(), tAM.getText(), tD.getText(),fecha,tTel.getText(),tPass.getText());
-        try {
-            clienteDAO.agregarClienteYusuario(c);
-             Logger.getLogger(Registro.class.getName()).log(Level.INFO,"Clientee agregado ");
-             limpiar();
-        } catch (SQLException ex) {
-            Logger.getLogger(Registro.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            //tFN.setText(fecha);
 
+//           //Date.valuesOf(fecha) para los tipo fecha
+            ClienteNuevoDTO c = new ClienteNuevoDTO(tNombre.getText(), tAP.getText(), tAM.getText(), tD.getText(), fecha, tTel.getText(), tPass.getText());
+            try {
+                clienteDAO.agregarClienteYusuario(c);
+                Logger.getLogger(Registro.class.getName()).log(Level.INFO, "Clientee agregado ");
+                limpiar();
+            } catch (SQLException ex) {
+                Logger.getLogger(Registro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
 //                      
     }//GEN-LAST:event_AgregarActionPerformed
 
@@ -323,65 +324,64 @@ if (tNombre.getText().isEmpty()|tAP.getText().isEmpty()|tAM.getText().isEmpty()|
 
     private void tTelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tTelKeyTyped
         // TODO add your handling code here:
-           if(tTel.getText().length() >= 10){
-        evt.consume();
-    }
-            int key = evt.getKeyChar();
+        if (tTel.getText().length() >= 10) {
+            evt.consume();
+        }
+        int key = evt.getKeyChar();
 
-    boolean numeros = key >= 48 && key <= 57;
-        
-    if (!numeros)
-    {
-        evt.consume();
-    }
+        boolean numeros = key >= 48 && key <= 57;
 
-    if (tTel.getText().trim().length() == 10) {
-        evt.consume();
-    }
-           
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (tTel.getText().trim().length() == 10) {
+            evt.consume();
+        }
+
     }//GEN-LAST:event_tTelKeyTyped
 
     private void tPassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tPassKeyTyped
         // TODO add your handling code here:
-        if(tPass.getText().length() >= 8){
-        evt.consume();
-    }
+        if (tPass.getText().length() >= 8) {
+            evt.consume();
+        }
     }//GEN-LAST:event_tPassKeyTyped
 
     private void tNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tNombreKeyTyped
         // TODO add your handling code here:
-         final char keyChar = evt.getKeyChar();
-    if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
-        evt.consume();
-    } else if (Character.isLowerCase(evt.getKeyChar())) {
-        evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
-    }
+        final char keyChar = evt.getKeyChar();
+        if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        } else if (Character.isLowerCase(evt.getKeyChar())) {
+            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
+        }
     }//GEN-LAST:event_tNombreKeyTyped
 
     private void tAPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tAPKeyTyped
         // TODO add your handling code here:
-         final char keyChar = evt.getKeyChar();
-    if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
-        evt.consume();
-    } else if (Character.isLowerCase(evt.getKeyChar())) {
-        evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
-    }
+        final char keyChar = evt.getKeyChar();
+        if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        } else if (Character.isLowerCase(evt.getKeyChar())) {
+            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
+        }
     }//GEN-LAST:event_tAPKeyTyped
 
     private void tAMKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tAMKeyTyped
         // TODO add your handling code here:
-         final char keyChar = evt.getKeyChar();
-    if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
-        evt.consume();
-    } else if (Character.isLowerCase(evt.getKeyChar())) {
-        evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
-    }
+        final char keyChar = evt.getKeyChar();
+        if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        } else if (Character.isLowerCase(evt.getKeyChar())) {
+            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
+        }
     }//GEN-LAST:event_tAMKeyTyped
 
     private void tDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tDKeyTyped
         // TODO add your handling code here:
     }//GEN-LAST:event_tDKeyTyped
-  private void centraVentana() {
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 

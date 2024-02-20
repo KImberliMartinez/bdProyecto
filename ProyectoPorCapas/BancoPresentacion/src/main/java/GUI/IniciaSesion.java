@@ -190,38 +190,37 @@ public class IniciaSesion extends javax.swing.JFrame {
 
     private void txtTelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelKeyTyped
         // TODO add your handling code here:
-         if(txtTel.getText().length() >= 10){
-        evt.consume();
-    }
-            int key = evt.getKeyChar();
+        if (txtTel.getText().length() >= 10) {
+            evt.consume();
+        }
+        int key = evt.getKeyChar();
 
-    boolean numeros = key >= 48 && key <= 57;
-        
-    if (!numeros)
-    {
-        evt.consume();
-    }
+        boolean numeros = key >= 48 && key <= 57;
 
-    if (txtTel.getText().trim().length() == 10) {
-        evt.consume();
-    }
-           
+        if (!numeros) {
+            evt.consume();
+        }
+
+        if (txtTel.getText().trim().length() == 10) {
+            evt.consume();
+        }
+
     }//GEN-LAST:event_txtTelKeyTyped
 
     private void jPasswordField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPasswordField1KeyTyped
         // TODO add your handling code here:
-         if(jPasswordField1.getText().length() >= 8){
-        evt.consume();
-    }
+        if (jPasswordField1.getText().length() >= 8) {
+            evt.consume();
+        }
     }//GEN-LAST:event_jPasswordField1KeyTyped
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
-        Inicio i=new Inicio();
+        Inicio i = new Inicio();
         i.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed
-private void centraVentana() {
+    private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -241,6 +240,7 @@ private void centraVentana() {
         setLocation((screenSize.width - frameSize.width) / 2,
                 (screenSize.height - frameSize.height) / 2);
     }
+
     /**
      * @param args the command line arguments
      */
