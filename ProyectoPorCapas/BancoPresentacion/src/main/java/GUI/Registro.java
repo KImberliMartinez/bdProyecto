@@ -55,6 +55,8 @@ public class Registro extends javax.swing.JFrame {
         tAP.setText("");
         tAM.setText("");
         tD.setText("");
+        tTel.setText("");
+        tPass.setText("");
 
         tNombre.requestFocus();
     }
@@ -365,9 +367,7 @@ public class Registro extends javax.swing.JFrame {
         final char keyChar = evt.getKeyChar();
         if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
             evt.consume();
-        } else if (Character.isLowerCase(evt.getKeyChar())) {
-            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
-        }
+        } 
     }//GEN-LAST:event_tNombreKeyTyped
 
     private void tAPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tAPKeyTyped
@@ -375,9 +375,7 @@ public class Registro extends javax.swing.JFrame {
         final char keyChar = evt.getKeyChar();
         if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
             evt.consume();
-        } else if (Character.isLowerCase(evt.getKeyChar())) {
-            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
-        }
+        } 
     }//GEN-LAST:event_tAPKeyTyped
 
     private void tAMKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tAMKeyTyped
@@ -385,9 +383,7 @@ public class Registro extends javax.swing.JFrame {
         final char keyChar = evt.getKeyChar();
         if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
             evt.consume();
-        } else if (Character.isLowerCase(evt.getKeyChar())) {
-            evt.setKeyChar(Character.toUpperCase(evt.getKeyChar()));
-        }
+        } 
     }//GEN-LAST:event_tAMKeyTyped
 
     private void tDKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tDKeyTyped

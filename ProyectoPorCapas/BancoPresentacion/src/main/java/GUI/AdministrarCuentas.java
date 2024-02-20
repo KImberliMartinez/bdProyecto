@@ -8,6 +8,8 @@ package GUI;
 import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.banconegocio.controlCuenta;
 import com.mycompany.bancopersistencia.ConexionBD;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,6 +34,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
     public AdministrarCuentas() {
         initComponents();
         c = new controlCuenta(conexion);
+        centraVentana();
         SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
         id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
 
@@ -90,6 +93,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Cuentas");
 
         tCuentas.setModel(new javax.swing.table.DefaultTableModel(
@@ -186,7 +190,26 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed
+private void centraVentana() {
+        //Obtiene el tamaño de la pantalla
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
+        // Obtiene el tamaño de la ventana de la aplicación
+        Dimension frameSize = getSize();
+
+        // Se asegura que el tamaño de la ventana de la aplicación
+        // no exceda el tamaño de la pantalla
+        if (frameSize.height > screenSize.height) {
+            frameSize.height = screenSize.height;
+        }
+        if (frameSize.width > screenSize.width) {
+            frameSize.width = screenSize.width;
+        }
+
+        // Centra la ventana de la aplicación sobre la pantalla
+        setLocation((screenSize.width - frameSize.width) / 2,
+                (screenSize.height - frameSize.height) / 2);
+    }
     private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
         // TODO add your handling code here:
         CancelarCuenta c = new CancelarCuenta();
@@ -199,6 +222,7 @@ public final class AdministrarCuentas extends javax.swing.JFrame {
         // TODO add your handling code here:
         c.agregarCuenta(id);
         JOptionPane.showMessageDialog(this, "Cuenta Agregada");
+         consultarCuentasPorCliente(id);
     }//GEN-LAST:event_agregarNuevoActionPerformed
 
     /**

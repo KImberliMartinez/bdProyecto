@@ -50,7 +50,8 @@ public class transferencias extends javax.swing.JFrame {
             id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
             c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
             transaccionDAO = new TransaccionDAO(conexion);
-            saldoDisponible.setText(Integer.toString(saldoDisponibleA));
+            //saldoDisponible.setText(Integer.toString(saldoDisponibleA));
+            actualizar();
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");
@@ -219,14 +220,12 @@ private void limpiar() {
                 JOptionPane.showMessageDialog(this, "No es posible realizar este deposito", "Cantidad no permitida", JOptionPane.INFORMATION_MESSAGE);
 
             }
-               // Verificar si el texto cumple con el formato de un número entero en el rango deseado
-            if (cantidad!=100||cantidad!=200||cantidad!=400||cantidad!=500||cantidad!=600||cantidad!=700||cantidad!=800||cantidad!=900||cantidad!=1000) {
-                // No hay error, entrar
+             
                 int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas depositar ?", "Confirmar deposito", JOptionPane.YES_NO_OPTION);
                       realizarTransferencia();
-                   JOptionPane.showMessageDialog(this, "transferencia realizada Realizado");
-            }
-                JOptionPane.showMessageDialog(this, "Cantidad no permitida ingrese valores enteros 100,200 etc.");
+                 //  JOptionPane.showMessageDialog(this, "transferencia realizada Realizado");
+            
+                
 
           
         }
@@ -235,14 +234,16 @@ private void limpiar() {
 
     private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
         // TODO add your handling code here:
-        opcionesCliente op = new opcionesCliente();
+  opcionesCliente op = new opcionesCliente();
+        String tel = Long.toString(SesionUsuario.getInstancia().getTelefono());
+        op.setTelefono(tel);
         op.setVisible(true);
-        this.setVisible(false);
         dispose();
     }//GEN-LAST:event_botonSalirActionPerformed
 
     private void ComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBox1ActionPerformed
         // TODO add your handling code here:
+       // String datoSeleccionado = (String) ComboBox1.getSelectedItem();
         //actualizar();
     }//GEN-LAST:event_ComboBox1ActionPerformed
 
@@ -370,11 +371,13 @@ private void limpiar() {
                 JOptionPane.showMessageDialog(this, "La cantidad a transferir excede el saldo disponible");
                 return;
             }
-
+            // Verificar si el texto cumple con el formato de un número entero en el rango deseado
+          if (cantidadTransferir==100||cantidadTransferir==200||cantidadTransferir==400||cantidadTransferir==500||cantidadTransferir!=600||cantidadTransferir==700||cantidadTransferir==800||cantidadTransferir==900||cantidadTransferir==1000) {
+                // No hay error, entrar
             // Realizar la transferencia de dinero utilizando el DAO correspondiente
             transaccionDAO.transferirDinero(numCuentaOrigen, cuentaDestino, cantidadTransferir);
             JOptionPane.showMessageDialog(this, "Transferencia exitosa");
-
+            }
             // Actualizar el saldo disponible en la interfaz gráfica
             saldoDisponibleA = saldoDisponibleActualizado - cantidadTransferir;
             saldoDisponible.setText(Integer.toString(saldoDisponibleA));

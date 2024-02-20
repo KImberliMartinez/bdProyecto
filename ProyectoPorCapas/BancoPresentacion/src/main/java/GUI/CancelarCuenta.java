@@ -51,7 +51,7 @@ public class CancelarCuenta extends javax.swing.JFrame {
         String datoSeleccionado = (String) box.getSelectedItem();
 
         if (datoSeleccionado != null) {
-            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas eliminar este dato?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas cancelar este dato?", "Confirmar cancelacion", JOptionPane.YES_NO_OPTION);
             
 
                 try (Connection conexion = ConexionBD.obtenerConexion();//conexion  
@@ -61,10 +61,10 @@ public class CancelarCuenta extends javax.swing.JFrame {
                     int filasAfectadas = statement.executeUpdate();
                        //mandar el dato
                     if (filasAfectadas > 0) {
-                        JOptionPane.showMessageDialog(this, "Dato eliminado correctamente.", "Eliminación exitosa", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Dato cancelado correctamente.", "Cancelacion exitosa", JOptionPane.INFORMATION_MESSAGE);
                         c.RellenarComboBox(box, "numero_cuenta", id);// Actualizar la JComboBox después de eliminar el dato
                     } else {
-                        JOptionPane.showMessageDialog(this, "No se encontró el dato para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "No se encontró el dato.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                      } catch (SQLException ex) {
                     ex.printStackTrace();
@@ -194,7 +194,7 @@ public class CancelarCuenta extends javax.swing.JFrame {
     private void eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarActionPerformed
         // TODO add your handling code here:
         eliminarDatoSeleccionado();
-        
+         consultarCuentasPorCliente(id);
     }//GEN-LAST:event_eliminarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

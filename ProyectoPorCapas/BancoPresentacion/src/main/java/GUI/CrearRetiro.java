@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
  * @author delll
  */
 public class CrearRetiro extends javax.swing.JFrame {
-
+    public int CantidadRetirar;
     private Connection conexion;
     private SesionUsuario iniciarSesion;
 
@@ -106,7 +106,7 @@ public class CrearRetiro extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(importeARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(114, 114, 114)
+                        .addGap(127, 127, 127)
                         .addComponent(botonAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(112, Short.MAX_VALUE))
         );
@@ -121,9 +121,9 @@ public class CrearRetiro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtImporteARetirar)
                     .addComponent(importeARetirar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                .addGap(31, 31, 31)
                 .addComponent(botonAceptar)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         pack();
@@ -154,6 +154,7 @@ public class CrearRetiro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No hay suficiente saldo en la cuenta", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             ctl.generarFolioYContrasena(this, numeroCuenta);
+            CantidadRetirar=importe;
             limpiar();
         }
     }//GEN-LAST:event_botonAceptarActionPerformed
@@ -178,7 +179,9 @@ public class CrearRetiro extends javax.swing.JFrame {
 
     private void botonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonSalirActionPerformed
         // TODO add your handling code here:
-        opcionesCliente op = new opcionesCliente();
+opcionesCliente op = new opcionesCliente();
+           String tel = Long.toString(SesionUsuario.getInstancia().getTelefono());
+        op.setTelefono(tel);
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_botonSalirActionPerformed

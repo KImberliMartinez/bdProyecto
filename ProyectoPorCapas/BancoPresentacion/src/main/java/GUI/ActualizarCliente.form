@@ -148,6 +148,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txNombre">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txNombreKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txDom">
     </Component>
@@ -186,6 +189,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tAP">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tAPKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel5">
       <Properties>
@@ -193,6 +199,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tAM">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="tAMKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel7">
       <Properties>

@@ -57,7 +57,7 @@ public class depositos extends javax.swing.JFrame {
 
             }
             // Verificar si el texto cumple con el formato de un número entero en el rango deseado
-            if (cantidad!=100||cantidad!=200||cantidad!=400||cantidad!=500||cantidad!=600||cantidad!=700||cantidad!=800||cantidad!=900||cantidad!=1000) {
+            if (cantidad==100||cantidad==200||cantidad==400||cantidad==500||cantidad!=600||cantidad==700||cantidad==800||cantidad==900||cantidad==1000) {
                 // No hay error, entrar
                 int confirmacion = JOptionPane.showConfirmDialog(this, "¿Estás seguro de que deseas depositar ?", "Confirmar deposito", JOptionPane.YES_NO_OPTION);
                     Depositar(dato, cantidad);
@@ -130,6 +130,7 @@ public class depositos extends javax.swing.JFrame {
         Salir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -151,7 +152,7 @@ public class depositos extends javax.swing.JFrame {
             }
         });
 
-        cancelar.setText("Cacelar");
+        cancelar.setText("Cancelar");
         cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cancelarActionPerformed(evt);
@@ -168,6 +169,9 @@ public class depositos extends javax.swing.JFrame {
         jLabel1.setText("Cantidad:");
 
         jLabel2.setText("No.Cuenta");
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Depositos");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -191,14 +195,18 @@ public class depositos extends javax.swing.JFrame {
                         .addComponent(cancelar))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(115, Short.MAX_VALUE))
+                        .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(112, 112, 112)
+                        .addComponent(jLabel3)))
+                .addContainerGap(109, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Salir)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Salir)
+                    .addComponent(jLabel3))
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -220,6 +228,8 @@ public class depositos extends javax.swing.JFrame {
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
         opcionesCliente op = new opcionesCliente();
+           String tel = Long.toString(SesionUsuario.getInstancia().getTelefono());
+        op.setTelefono(tel);
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed
@@ -263,7 +273,7 @@ public class depositos extends javax.swing.JFrame {
 
     private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
         // TODO add your handling code here:
-
+        txCantidad.setText("");
 
     }//GEN-LAST:event_cancelarActionPerformed
 
@@ -309,6 +319,7 @@ public class depositos extends javax.swing.JFrame {
     private javax.swing.JButton cancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JTextField txCantidad;
     // End of variables declaration//GEN-END:variables
 }

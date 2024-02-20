@@ -38,7 +38,7 @@
                       <Component id="importeARetirar" min="-2" pref="99" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="114" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="127" max="-2" attributes="0"/>
                       <Component id="botonAceptar" min="-2" pref="134" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -59,9 +59,9 @@
                   <Component id="txtImporteARetirar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="importeARetirar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
               <Component id="botonAceptar" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="93" max="32767" attributes="0"/>
+              <EmptySpace pref="92" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>

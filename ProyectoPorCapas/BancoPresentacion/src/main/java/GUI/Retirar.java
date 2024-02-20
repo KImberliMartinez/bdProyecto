@@ -30,6 +30,10 @@ private controlCuenta c;
         initComponents();
         centraVentana();
         c = new controlCuenta(conexion);
+            
+          SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+        id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
+        c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
     }
 
     /**
@@ -141,15 +145,15 @@ private controlCuenta c;
          double saldoActual = 0;
          String datoSeleccionado = (String) ComboBox1.getSelectedItem();
         int dato = Integer.parseInt(datoSeleccionado);
-          SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
-        id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
-        c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
+       
         // Obtener el saldo actual del cliente desde la base de datos
-        try{
-        saldoActual = obtenerSaldoDisponible(dato);
-        }catch(SQLException ex){
-            ex.printStackTrace();
-        }
+        saldoActual =c.obtenerSaldoDisponible(dato);
+       
+//        CrearRetiro r=new CrearRetiro();
+//       int cn =r.CantidadRetirar;
+//        if(montoARetirar!=cn){
+//              JOptionPane.showMessageDialog(this, "No puede retirar mas de: " + cn);
+//        }
         if (saldoActual >= montoARetirar) {
              try {
                  // Permitir el retiro

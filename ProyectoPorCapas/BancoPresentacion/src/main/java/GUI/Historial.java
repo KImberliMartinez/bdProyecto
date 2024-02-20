@@ -80,6 +80,7 @@ public class Historial extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Historial operaciones");
 
         jLabel3.setText("Tipo de operacion:");
@@ -236,7 +237,9 @@ public class Historial extends javax.swing.JFrame {
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         // TODO add your handling code here:
-        opcionesCliente op = new opcionesCliente();
+  opcionesCliente op = new opcionesCliente();
+        String tel = Long.toString(SesionUsuario.getInstancia().getTelefono());
+        op.setTelefono(tel);
         op.setVisible(true);
         dispose();
     }//GEN-LAST:event_SalirActionPerformed

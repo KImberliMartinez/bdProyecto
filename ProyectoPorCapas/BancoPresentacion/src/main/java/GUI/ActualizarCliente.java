@@ -7,10 +7,12 @@ package GUI;
 
 import com.mycompany.bancodominio.DAO.ClienteDAO;
 import com.mycompany.bancodominio.dtos.ClienteNuevoDTO;
+import com.mycompany.banconegocio.SesionUsuario;
 import com.mycompany.bancopersistencia.ConexionBD;
 import com.mycompany.bancopersistencia.PersistenciaException;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -88,6 +90,12 @@ public class ActualizarCliente extends javax.swing.JFrame {
 
         jLabel6.setText(" Domicilio:");
 
+        txNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txNombreKeyTyped(evt);
+            }
+        });
+
         Actalizar.setText("Actualizar");
         Actalizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,7 +121,19 @@ public class ActualizarCliente extends javax.swing.JFrame {
 
         jLabel4.setText("Ap_Patreno:");
 
+        tAP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tAPKeyTyped(evt);
+            }
+        });
+
         jLabel5.setText("Ap_Materno:");
+
+        tAM.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tAMKeyTyped(evt);
+            }
+        });
 
         jLabel7.setText("Dato a actualizar:");
 
@@ -227,10 +247,35 @@ public class ActualizarCliente extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        opcionesCliente op=new opcionesCliente();
+opcionesCliente op = new opcionesCliente();
+           String tel = Long.toString(SesionUsuario.getInstancia().getTelefono());
+        op.setTelefono(tel);
         op.setVisible(true);
-        this.dispose();
+        dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void txNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txNombreKeyTyped
+       final char keyChar = evt.getKeyChar();
+        if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txNombreKeyTyped
+
+    private void tAPKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tAPKeyTyped
+        // TODO add your handling code here:
+        final char keyChar = evt.getKeyChar();
+        if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tAPKeyTyped
+
+    private void tAMKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tAMKeyTyped
+        // TODO add your handling code here:
+        final char keyChar = evt.getKeyChar();
+        if (!(Character.isAlphabetic(keyChar) || (keyChar == KeyEvent.VK_BACK_SPACE) || keyChar == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_tAMKeyTyped
   private void centraVentana() {
         //Obtiene el tamaño de la pantalla
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
