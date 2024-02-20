@@ -159,7 +159,7 @@ private controlCuenta c;
                  // Permitir el retiro
                  double nuevoSaldo = saldoActual - montoARetirar;
                  // Actualizar el saldo en la base de datos
-                 c.actualizarSaldoCliente(dato,nuevoSaldo);
+                 c.actualizarSaldoCliente(dato,nuevoSaldo);//No jala
                  c.GuardarDatosRetiro(dato,montoARetirar);
                  JOptionPane.showMessageDialog(this, "Retiro exitoso. Nuevo saldo: " + nuevoSaldo);
              } catch (SQLException ex) {
