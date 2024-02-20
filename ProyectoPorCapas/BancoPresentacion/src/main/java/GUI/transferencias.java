@@ -39,18 +39,18 @@ public class transferencias extends javax.swing.JFrame {
     // int saldoDisponibleActualizado = obtenerSaldoDisponible(numCuentaOrigen);
     // saldoDisponibleA = saldoDisponibleActualizado
     public transferencias() {
-        initComponents();
-        centraVentana();
-        c = new controlCuenta(conexion);
-        SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
-        id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
-        c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
         try {
-
-            conexion = ConexionBD.obtenerConexion();
+            conexion = ConexionBD.obtenerConexion(); // Inicializa la conexión primero
+            initComponents();
+            centraVentana();
+            c = new controlCuenta(conexion);
+            SesionUsuario sesionUsuario = SesionUsuario.getInstancia();
+            int saldoDisponibleA = c.obtenerSaldoDisponible(sesionUsuario.getNumeroCuenta());
+            saldoDisponible.setText(Integer.toString(saldoDisponibleA));
+            id = c.obtenerClientePorTelefono(sesionUsuario.getTelefono());
+            c.RellenarComboBox(ComboBox1, "numero_cuenta", id);
             transaccionDAO = new TransaccionDAO(conexion);
             saldoDisponible.setText(Integer.toString(saldoDisponibleA));
-
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al conectar a la base de datos");

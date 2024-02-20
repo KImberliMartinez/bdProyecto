@@ -132,7 +132,10 @@ public class RetiroSinTarjeta extends javax.swing.JFrame {
         String folio = numFolio.getText();
          if (controlCuenta.validarFolio(folio)) {
              JOptionPane.showMessageDialog(this, controlCuenta.obtenerInformacionFolio(folio), "Información del Folio", JOptionPane.INFORMATION_MESSAGE);
-    } else {
+            IniciaSesionRetiro in=new IniciaSesionRetiro();
+             in.setVisible(true);
+             dispose();
+         } else {
         JOptionPane.showMessageDialog(this, "El folio ingresado no es válido", "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_botonContinuarActionPerformed

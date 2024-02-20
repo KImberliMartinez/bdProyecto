@@ -22,7 +22,7 @@ public class TransaccionDAO {
     }
 
     public void transferirDinero(int numeroCuentaOrigen, int numeroCuentaDestino, int monto) throws SQLException {
-        String query = "INSERT INTO Transacciones (Fecha, Monto, Numero_de_cuenta_destino) "
+        String query = "INSERT INTO transacciones (Fecha, Monto, Numero_de_cuenta_destino) "
                 + "VALUES (CURDATE(), ?, ?)";
         try ( PreparedStatement pstmt = conexion.prepareStatement(query)) {
             pstmt.setInt(1, monto);

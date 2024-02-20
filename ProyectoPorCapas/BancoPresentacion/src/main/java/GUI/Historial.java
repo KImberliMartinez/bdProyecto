@@ -223,7 +223,7 @@ public class Historial extends javax.swing.JFrame {
 
         // Realizar la consulta a la base de datos
         try {
-            String query = "SELECT Fecha, Monto, Tipo FROM Transacciones WHERE Numero_de_cuenta_destino = ? AND Tipo = ? AND Fecha BETWEEN ? AND ?";
+            String query = "SELECT Fecha, Monto, Tipo FROM transacciones WHERE Numero_de_cuenta_destino = ? AND Tipo = ? AND Fecha BETWEEN ? AND ?";
             PreparedStatement ps = conexion.prepareStatement(query);
             ps.setInt(1, numeroCuenta); // Filtrar por el número de cuenta del usuario
             ps.setString(2, tipo);
